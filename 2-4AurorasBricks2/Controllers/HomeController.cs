@@ -2,16 +2,18 @@ using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using _2_4AurorasBricks2.Models;
 
 namespace _2_4AurorasBricks2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        public ILegoRepository _repo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILegoRepository temp)
         {
-            _logger = logger;
+            _repo = temp;
         }
 
         public IActionResult Index()
@@ -29,7 +31,8 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult Cart()
         {
-            return View();
+            var oneCart = _repo.Products.ToList();
+            return View(oneCart);
         }
         public IActionResult EditProducts()
         {
