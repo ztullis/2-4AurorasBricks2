@@ -11039,3 +11039,15 @@ p {
 .navbar-nav .nav-link:hover {
         color: grey !important;
  }
+
+#cookieConsent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f0f0f0; /* Neutral color */
+    color: #333; /* Text color */
+    padding: 10px;
+    text-align: center;
+    z-index: 1000;
+}
