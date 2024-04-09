@@ -1,4 +1,5 @@
 using _2_4AurorasBricks2.Data;
+using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddDbContext<LegoContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:LegoConnection"]);
+});
+
+builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
 builder.Services.AddRazorPages();
 

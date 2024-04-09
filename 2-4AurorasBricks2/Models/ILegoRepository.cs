@@ -3,8 +3,8 @@
     public interface ILegoRepository
     {
         public IQueryable<Order> Orders { get; }
-        public IQueryable<LineItem> LineItem { get; }
-        public IQueryable<Product> Product { get; }
-        public IQueryable<Customer> Customer { get; }
+        public IQueryable<LineItem> LineItems { get; }
+        public IQueryable<Product> Products { get; }
+        public IQueryable<Customer> Customers { get; }
     }
 }
