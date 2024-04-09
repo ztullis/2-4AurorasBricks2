@@ -1,5 +1,6 @@
 using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace _2_4AurorasBricks2.Controllers
