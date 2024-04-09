@@ -3,3 +3,73 @@
 *@
 @{
 }
+@* <style>
+    .table-container {
+        overflow-x: auto; /* Enable horizontal scrolling for wide tables */
+        margin: 0 auto; /* Center the table horizontally */
+        width: 90%; /* Set the width of the table container */
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: white; /* Set background color of the table */
+    }
+
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+*@
+
+<div style="background-color:white">
+    <div class="title-container">
+        <h2>Lego Products</h2>
+        <a class="btn btn-primary">Add</a>
+    </div>
+
+
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Year</th>
+                    <th>Number of Parts</th>
+                    <th>Primary Color</th>
+                    <th>Secondary Color</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Product p in Model)
+                {
+                    <tr>
+                        <td><img src="@p.ImgLink" width="100"/></td>
+                        <td>@p.Name</td>
+                        <td>$ @p.Price</td>
+                        <td>@p.Category</td>
+                        <td>@p.Year</td>
+                        <td>@p.NumParts</td>
+                        <td>@p.PrimaryColor</td>
+                        <td>@p.SecondaryColor</td>
+                        <td>@p.Description</td>
+                        <td><a class="btn btn-primary">Edit</a></td>
+                        <td><a class="btn btn-primary">Delete</a></td>
+                    </tr>
+                }
+
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+</div>

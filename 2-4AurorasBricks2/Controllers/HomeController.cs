@@ -31,12 +31,12 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult Cart()
         {
-            var oneCart = _repo.Products.ToList();
-            return View(oneCart);
+            return View();
         }
         public IActionResult EditProducts()
         {
-            return View();
+            var oneCart = _repo.Products.ToList();
+            return View(oneCart);
         }
         public IActionResult EditUsers()
         {

@@ -1,0 +1,52 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Product
+
+<div class="container">
+    <!-- Add a container to center the grid -->
+    <div class="row justify-content-center">
+        <!-- Use justify-content-center to center the column -->
+        <div class="col-lg-6">
+            <!-- Specify the column size -->
+            <h1>Input a Product!</h1>
+            <div>
+                <form method="post">
+                    <input type="hidden" asp-for="ProductId" />
+                    <label asp-for="ImgLink">Product Name</label>
+                    <input asp-for="ImgLink" /><br /><br />
+
+                    <label asp-for="Name">Product Name</label>
+                    <input asp-for="Name" /><br /><br />
+
+                    <label asp-for="Price">Price</label>
+                    <input asp-for="Price" /><br /><br />
+
+                    <label asp-for="Category">Category</label>
+                    <input asp-for="Category" /><br /><br />
+
+                    <label asp-for="Year">Year:</label>
+                    <input asp-for="Year" type="date" />
+                    <br /><br />
+
+                    <label asp-for="NumParts">Number of Parts</label>
+                    <input asp-for="NumParts" /><br /><br />
+
+                    <label asp-for="PrimaryColor">Primary Color</label>
+                    <input asp-for="PrimaryColor" /><br /><br />
+
+                    <label asp-for="SecondaryColor">Secondary Color</label>
+                    <input asp-for="SecondaryColor" /><br /><br />
+
+                    <label asp-for="Description">CaDescriptiontegory</label>
+                    <input asp-for="Description" /><br /><br />
+
+                    <button type="submit">Submit</button>
+                    <div asp-validation-summary="All"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
