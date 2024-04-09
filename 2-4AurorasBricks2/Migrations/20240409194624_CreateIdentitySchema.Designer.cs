@@ -11,7 +11,7 @@ using _2_4AurorasBricks2.Data;
 namespace _2_4AurorasBricks2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240409154044_CreateIdentitySchema")]
+    [Migration("20240409194624_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />
