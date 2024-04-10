@@ -8,3 +8,16 @@ window.addEventListener('DOMContentLoaded', event => {
     const listHoursArray = document.body.querySelectorAll('.list-hours li');
     listHoursArray[new Date().getDay()].classList.add(('today'));
 })
+
+function toggleDescription(button) {
+    var description = button.parentElement;
+    var fullDescription = description.querySelector('.full');
+
+    if (fullDescription.style.display === 'none' || fullDescription.style.display === '') {
+        fullDescription.style.display = 'inline';
+        button.innerText = 'Less...';
+    } else {
+        fullDescription.style.display = 'none';
+        button.innerText = 'More...';
+    }
+}
