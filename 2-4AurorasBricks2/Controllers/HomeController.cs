@@ -105,7 +105,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View("AddProducts", updatedProduct);
             //}
         }
-
+        
         [HttpGet]
         public IActionResult DeleteProducts(int id)
         {
