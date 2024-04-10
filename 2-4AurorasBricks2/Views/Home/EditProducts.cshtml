@@ -19,7 +19,6 @@
                                 <br />
                                 <h2 style="margin-bottom: 20px;">Our Lego Sets!</h2>
                                 <a class="btn btn-primary" asp-controller="Home" asp-action="AddProducts">Add a Product</a><br />
-                            
 
 
                             <div class="table">
@@ -71,12 +70,11 @@
                                                 <td>@p.Description</td> *@
                                                 <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
                                                 <td><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
-
-                    </tr>
-                }
-                <!-- Add more rows as needed -->
-            </tbody>
-            
+                                            </tr>
+                                            @Html.HiddenFor(model => p.ProductId)
+                                        }
+                                        <!-- Add more rows as needed -->
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -86,6 +84,5 @@
          </div>
     </div>
 </section>
-<div page-model="@Model.PaginationInfo" page-action="EditProducts"></div>
-
-<div page-model="@Model.PaginationInfo" page-action="EditProducts" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" page-url-projectType="@Model.CurrentProjectType" class="btn-group pull-right m-1"></div>
+<div
+<div page-model="@Model.PaginationInfo" class="btn-group pull-right m-1"></div>
