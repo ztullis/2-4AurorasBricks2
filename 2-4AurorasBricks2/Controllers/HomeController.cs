@@ -39,10 +39,14 @@ namespace _2_4AurorasBricks2.Controllers
         {
             int pageSize = 5;
 
-            var Blah = new ProjectsListViewModel
+            pageNum = Math.Max(pageNum, 1);
+
+            var viewModel = new ProjectsListViewModel
             {
                 Products = _repo.Products
-                    .Take(pageSize), 
+                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize),
 
                 PaginationInfo = new PaginationInfo
                 {
@@ -52,7 +56,7 @@ namespace _2_4AurorasBricks2.Controllers
                 }
             };
 
-            return View(Blah);
+            return View(viewModel);
         }
 
         [HttpGet]

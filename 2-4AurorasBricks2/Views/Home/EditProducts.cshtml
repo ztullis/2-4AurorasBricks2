@@ -64,14 +64,12 @@
 
                     </tr>
                 }
-
                 <!-- Add more rows as needed -->
             </tbody>
             
         </table>
     </div>
 </div>
+<div page-model="@Model.PaginationInfo" page-action="EditProducts"></div>
 
-<a asp-controller="Home" asp-action="EditProducts" asp-route-pageNum="1">1</a>
-<a asp-controller="Home" asp-action="EditProducts" asp-route-pageNum="2">2</a>
-
+<div page-model="@Model.PaginationInfo" page-action="EditProducts" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" page-url-projectType="@Model.CurrentProjectType" class="btn-group pull-right m-1"></div>
