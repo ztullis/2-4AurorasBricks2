@@ -13,14 +13,15 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
         ?? throw new InvalidOperationException("Connection string not found.");
 
-builder.Services.AddDbContext<LoginDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddDbContext<LoginDbContext>(options =>
+{
+    options.UseSqlite(connectionString);
+});
 
 builder.Services.AddDbContext<LegoContext>(options =>
 {
-    options.UseSqlite(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:LegoConnection"]);
 });
-
-
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     options =>
@@ -54,6 +55,8 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     // Set token lifespan to 2 hours
     options.TokenLifespan = TimeSpan.FromHours(2);
 });
+
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
