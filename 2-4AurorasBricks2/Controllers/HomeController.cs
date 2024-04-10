@@ -34,9 +34,12 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
-        public IActionResult EditProducts()
+        public IActionResult EditProducts(int pageNum)
         {
-            var oneCart = _repo.Products.ToList();
+            int pagesize = 5;
+
+            var oneCart = _repo.Products.ToList()
+                .Take(pagesize);
             return View(oneCart);
         }
 
