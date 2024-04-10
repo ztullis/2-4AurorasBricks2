@@ -6,6 +6,7 @@
 
 @model ProjectsListViewModel
 
+
 <br />
 <section class="page-section about-heading">
     <div class="container">
@@ -69,7 +70,7 @@
 
                                                 <td>@p.Description</td> *@
                                                 <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
-                                                <td><a class="btn btn-danger" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
+                                                <td><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
 
                     </tr>
                 }

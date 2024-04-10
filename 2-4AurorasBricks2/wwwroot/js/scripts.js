@@ -21,3 +21,16 @@ function toggleDescription(button) {
         button.innerText = 'More...';
     }
 }
+
+
+$(document).ready(function () {
+    // Show overlay when delete button is clicked
+    $("#show-overlay-button").click(function () {
+        $("#confirmation-overlay").show();
+    });
+
+    // Hide overlay when cancel button or outside the overlay is clicked
+    $("#cancel-button, .overlay").click(function () {
+        $("#confirmation-overlay").hide();
+    });
+});
