@@ -1,4 +1,4 @@
-using _2_4AurorasBricks2.Data;
+//using _2_4AurorasBricks2.Data;
 using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -7,16 +7,56 @@ using Microsoft.EntityFrameworkCore.Sqlite;
 
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
+builder.Services.AddControllersWithViews();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? throw new InvalidOperationException("Connection string not found.");
+
+builder.Services.AddDbContext<LoginDbContext>(options =>
+{
+    options.UseSqlite(connectionString);
+});
 
 builder.Services.AddDbContext<LegoContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:LegoConnection"]);
 });
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+    options =>
+    {
+        // Password settings
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequiredUniqueChars = 4;
+        // Other settings can be configured here
+
+    })
+    .AddEntityFrameworkStores<LoginDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddTransient<ISenderEmail, EmailSender>();
+
+// Configure the Application Cookie settings
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    // If the LoginPath isn't set, ASP.NET Core defaults the path to /Account/Login.
+    options.LoginPath = "/Account/Login"; // Set your login path here
+    options.AccessDeniedPath = "/Account/InsufficientPrivileges"; // Set the path to the page for insufficient privileges
+});
+
+// Configure token lifespan
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    // Set token lifespan to 2 hours
+    options.TokenLifespan = TimeSpan.FromHours(2);
+});
+
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
@@ -30,8 +70,6 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
     options.ConsentCookieValue = "true";
 });
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
 // Configure HSTS to use a longer max age, include subdomains, and enable preloading
 builder.Services.AddHsts(options =>
@@ -57,10 +95,14 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 
+app.UseAuthentication();    
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();
