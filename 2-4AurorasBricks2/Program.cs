@@ -25,34 +25,34 @@ var host = Host.CreateDefaultBuilder(args)
             var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
             var client = new SecretClient(new Uri(kvUrl), credential);
 
-            config.AddAzureKeyVault(client, new AzureKeyVaultConfigurationOptions());
-        });
-    })
-    .ConfigureServices((context, services) =>
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? throw new InvalidOperationException("Connection string not found.");
+
+builder.Services.AddDbContext<LoginDbContext>(options =>
+{
+    options.UseSqlite(connectionString);
+});
+
+builder.Services.AddDbContext<LegoContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:LegoConnection"]);
+});
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+    options =>
     {
-        // Add services and configuration to the DI container
-        services.AddControllersWithViews();
-        services.AddRazorPages();
+        // Password settings
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequiredUniqueChars = 4;
+        // Other settings can be configured here
 
-        // Configure Entity Framework
-        services.AddDbContext<LoginDbContext>(options =>
-            options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection")));
-
-        services.AddDbContext<LegoContext>(options =>
-            options.UseSqlite(context.Configuration.GetConnectionString("LegoConnection")));
-
-        // Configure Identity
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-        {
-            options.Password.RequireDigit = true;
-            options.Password.RequiredLength = 8;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequiredUniqueChars = 4;
-        })
-        .AddEntityFrameworkStores<LoginDbContext>()
-        .AddDefaultTokenProviders();
+    })
+    .AddEntityFrameworkStores<LoginDbContext>()
+    .AddDefaultTokenProviders();
 
         // Application Cookie settings
         services.ConfigureApplicationCookie(options =>
@@ -67,14 +67,53 @@ var host = Host.CreateDefaultBuilder(args)
             options.TokenLifespan = TimeSpan.FromHours(2);
         });
 
-        // HSTS Configuration
-        services.AddHsts(options =>
-        {
-            options.MaxAge = TimeSpan.FromDays(365);
-            options.IncludeSubDomains = true;
-            options.Preload = true;
-        });
-    })
-    .Build();
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
+
+builder.Services.AddRazorPages();
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This lambda determines whether user consent for non-essential 
+    // cookies is needed for a given request.
+    options.CheckConsentNeeded = context => true;
+
+    options.MinimumSameSitePolicy = SameSiteMode.None;
+    options.ConsentCookieValue = "true";
+});
+
+// Configure HSTS to use a longer max age, include subdomains, and enable preloading
+builder.Services.AddHsts(options =>
+{
+    options.MaxAge = TimeSpan.FromDays(365);
+    options.IncludeSubDomains = true;
+    options.Preload = true;
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios.
+    app.UseHsts(); // Now configured via IServiceCollection
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseCookiePolicy();
+
+app.UseRouting();
+
+app.UseAuthentication();    
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 host.Run();

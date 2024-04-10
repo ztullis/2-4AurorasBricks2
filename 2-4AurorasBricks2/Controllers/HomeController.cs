@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using _2_4AurorasBricks2.Models;
 using Microsoft.Identity.Client;
+using _2_4AurorasBricks2.Models.ViewModels;
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -36,11 +37,26 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult EditProducts(int pageNum)
         {
-            int pagesize = 5;
+            int pageSize = 5;
 
-            var oneCart = _repo.Products.ToList()
-                .Take(pagesize);
-            return View(oneCart);
+            pageNum = Math.Max(pageNum, 1);
+
+            var viewModel = new ProjectsListViewModel
+            {
+                Products = _repo.Products
+                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Products.Count()
+                }
+            };
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -93,7 +109,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View("AddProducts", updatedProduct);
             //}
         }
-
+        
         [HttpGet]
         public IActionResult DeleteProducts(int id)
         {
