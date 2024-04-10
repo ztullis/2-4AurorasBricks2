@@ -15,7 +15,7 @@
             <div>
                 <form method="post">
                     <input type="hidden" asp-for="ProductId" />
-                    <label asp-for="ImgLink">Product Name</label>
+                    <label asp-for="ImgLink">Link to Image</label>
                     <input asp-for="ImgLink" /><br /><br />
 
                     <label asp-for="Name">Product Name</label>
@@ -44,7 +44,6 @@
                     <input asp-for="Description" /><br /><br />
 
                     <button type="submit">Submit</button>
-                    <div asp-validation-summary="All"></div>
                 </form>
             </div>
         </div>
