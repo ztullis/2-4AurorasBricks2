@@ -55,6 +55,8 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromHours(2);
 });
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddScoped<ILegoRepository, EFLegoRepository>();
 
 builder.Services.AddRazorPages();
