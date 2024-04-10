@@ -5,7 +5,7 @@
 }
 @model Product
 
-<div class="container">
+<div class="container container-form">
     <!-- Add a container to center the grid -->
     <div class="row justify-content-center">
         <!-- Use justify-content-center to center the column -->
@@ -15,32 +15,32 @@
             <div>
                 <form method="post">
                     <input type="hidden" asp-for="ProductId" />
-                    <label asp-for="ImgLink">Link to Image</label>
+                    <label asp-for="ImgLink">Link to Image :</label>
                     <input asp-for="ImgLink" /><br /><br />
 
-                    <label asp-for="Name">Product Name</label>
+                    <label asp-for="Name">Product Name :</label>
                     <input asp-for="Name" /><br /><br />
 
-                    <label asp-for="Price">Price</label>
+                    <label asp-for="Price">Price :</label>
                     <input asp-for="Price" /><br /><br />
 
-                    <label asp-for="Category">Category</label>
+                    <label asp-for="Category">Category :</label>
                     <input asp-for="Category" /><br /><br />
 
-                    <label asp-for="Year">Year:</label>
+                    <label asp-for="Year">Year :</label>
                     <input asp-for="Year" type="date" />
                     <br /><br />
 
-                    <label asp-for="NumParts">Number of Parts</label>
+                    <label asp-for="NumParts">Number of Parts :</label>
                     <input asp-for="NumParts" /><br /><br />
 
-                    <label asp-for="PrimaryColor">Primary Color</label>
+                    <label asp-for="PrimaryColor">Primary Color :</label>
                     <input asp-for="PrimaryColor" /><br /><br />
 
-                    <label asp-for="SecondaryColor">Secondary Color</label>
+                    <label asp-for="SecondaryColor">Secondary Color :</label>
                     <input asp-for="SecondaryColor" /><br /><br />
 
-                    <label asp-for="Description">Description</label>
+                    <label asp-for="Description">Description :</label>
                     <input asp-for="Description" /><br /><br />
 
                     <button type="submit">Submit</button>
