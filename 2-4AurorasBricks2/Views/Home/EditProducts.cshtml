@@ -6,17 +6,7 @@
 
 @model ProjectsListViewModel
 
-    th, td {
-        border: 1px solid black;
-        padding: 8px;
-        text-align: left;
-    }
 
-    th {
-        background-color: #f2f2f2;
-    }
-</style>
-*@
 <br />
 <section class="page-section about-heading">
     <div class="container">
@@ -49,7 +39,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (Product p in Model)
+                                        @foreach (Product p in Model.Products)
                                         {
                                             <tr>
                                                 <td><img src="@p.ImgLink" width="100"/></td>
@@ -80,7 +70,7 @@
 
                                                 <td>@p.Description</td> *@
                                                 <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
-                                                <td><a class="btn btn-danger" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
+                                                <td><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
 
                                             </tr>
                                         }
