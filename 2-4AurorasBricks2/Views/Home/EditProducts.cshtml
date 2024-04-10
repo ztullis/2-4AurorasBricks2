@@ -62,14 +62,34 @@
                         <td>@p.NumParts</td>
                         <td>@p.PrimaryColor</td>
                         <td>@p.SecondaryColor</td>
+
+                        <td>
+                            <div class="description">
+                                @if (p.Description.Length > 50)
+                                {
+                                    <span class="short-description">@Html.Raw(p.Description.Substring(0, 50))</span>
+                                    <span class="full" style="display:none;">@Html.Raw(p.Description)</span>
+                                    <button class="more-button" onclick="toggleDescription(this)">More...</button>
+                                }
+                                else
+                                {
+                                    @Html.Raw(p.Description)
+                                }
+                            </div>
+                        </td>
+                        <td><a class="btn btn-primary">Edit</a></td>
+                        <td><a class="btn btn-primary">Delete</a></td>
+
                         <td>@p.Description</td>
                         <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
                         <td><a class="btn btn-danger" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
+
                     </tr>
                 }
 
                 <!-- Add more rows as needed -->
             </tbody>
+            
         </table>
     </div>
 </div>
