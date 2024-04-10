@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using _2_4AurorasBricks2.Models;
+using Microsoft.Identity.Client;
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -37,6 +38,74 @@ namespace _2_4AurorasBricks2.Controllers
         {
             var oneCart = _repo.Products.ToList();
             return View(oneCart);
+        }
+
+        [HttpGet]
+        public IActionResult AddProducts()
+        {
+            var newProduct = new Product();
+            return View(newProduct);
+        }
+
+        [HttpPost]
+        public IActionResult AddProducts(Product response)
+        {
+
+            _repo.AddProduct(response);
+            return RedirectToAction("EditProducts");
+            //if (ModelState.IsValid)
+            //{
+            //    _repo.AddProduct(response);
+            //    return RedirectToAction("EditProducts");
+            //}
+            //else
+            //{
+            //    return View(response);
+            //}
+        }
+        [HttpGet]
+        public IActionResult EditProductsSingle(int id)
+        {
+            var productToEdit = _repo.Products
+                .Single(x => x.ProductId == id);
+
+            return View("AddProducts", productToEdit);
+        }
+
+        [HttpPost]
+        public IActionResult EditProductsSingle(Product updatedProduct)
+        {
+            _repo.EditProduct(updatedProduct);
+
+            return RedirectToAction("EditProducts");
+
+            //if (ModelState.IsValid)
+            //{
+            //    _repo.EditProduct(updatedProduct);
+
+            //    return RedirectToAction("EditProducts");
+            //}
+            //else
+            //{
+            //    return View("AddProducts", updatedProduct);
+            //}
+        }
+
+        [HttpGet]
+        public IActionResult DeleteProducts(int id)
+        {
+            var productToDelete = _repo.Products
+                .Single(x => x.ProductId == id);
+
+            return View("DeleteProducts", productToDelete);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteProducts(Product productToDelete)
+        {
+            _repo.DeleteProduct(productToDelete);
+
+            return RedirectToAction("EditProducts");
         }
         public IActionResult EditUsers()
         {
