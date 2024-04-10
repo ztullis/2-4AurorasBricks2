@@ -31,7 +31,7 @@
 <div style="background-color:white">
     <div class="title-container">
         <h2>Lego Products</h2>
-        <a class="btn btn-primary">Add</a>
+        <a class="btn btn-primary" asp-controller="Home" asp-action="AddProducts">Add</a>
     </div>
 
 
@@ -78,6 +78,9 @@
                         </td>
                         <td><a class="btn btn-primary">Edit</a></td>
                         <td><a class="btn btn-primary">Delete</a></td>
+                        <td>@p.Description</td>
+                        <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
+                        <td><a class="btn btn-danger" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
                     </tr>
                 }
 
