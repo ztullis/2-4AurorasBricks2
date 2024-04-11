@@ -684,6 +684,10 @@ progress {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
+.row-product {
+  display: flex;
+  flex-wrap: wrap;
+}
 .row > * {
   flex-shrink: 0;
   width: 100%;
@@ -11130,6 +11134,6 @@ input[type="date"] {
 }
 
 .products-container {
-    background-color: white;
+    background-color: white !important;
     padding: 20px; /* Optional: Add padding around the products */
 }
