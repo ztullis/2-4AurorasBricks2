@@ -2,8 +2,6 @@ using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using _2_4AurorasBricks2.Models;
 using Microsoft.Identity.Client;
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
@@ -17,18 +15,20 @@ namespace _2_4AurorasBricks2.Controllers
         public ILegoRepository _repo;
         private readonly InferenceSession _session;
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILegoRepository temp, ILogger<HomeController> logger)
+        private readonly string _onnxPath;
+        //Some people have made an ONX Path Variable and defined it to the _session model
+        public HomeController(ILegoRepository temp, ILogger<HomeController> logger, IHostEnvironment hostEnvironment)
         {
             _repo = temp;
             _logger = logger;
+            _onnxPath = System.IO.Path.Combine(hostEnvironment.ContentRootPath, "fraudulent_pipeline.onnx");
 
             try
             {
-                _session = new InferenceSession("C:\\Users\\oliverescobar\\Source\\Repos\\2-4AurorasBricks2\\2-4AurorasBricks2\\fraudulent_pipeline.onnx");
+                _session = new InferenceSession(_onnxPath);
                 _logger.LogInformation("ONNX model loaded successfully.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Error loading the ONNX model: {ex.Message}");
             }
@@ -161,57 +161,11 @@ namespace _2_4AurorasBricks2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpPost]
-        public IActionResult Predict(int fraud)
-        {
-            var class_type_dict = new Dictionary<int, string>
-            {
-                { 0, "Not Fraud" },
-                { 1, "Fraud" }
-            };
-
-            try
-            {
-                // I should add variables below in the curly braces according to what I want to add in the fraud pipeline, which I think should be everything ...  
-                var input = new List<int> { };
-                var inputTensor = new DenseTensor<int>(input.ToArray(), new[] { 1, input.Count });
-
-                var inputs = new List<NamedOnnxValue>
-                {
-                    NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
-                };
-
-                using (var results = _session.Run(inputs))
-                {
-                    var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
-                    if (prediction != null && prediction.Length > 0)
-                    {
-                        // Use the prediction to get the fraud from the dictionary
-                        var fraudPrediction = class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown");
-                        ViewBag.Prediction = fraudPrediction;
-                    }
-                    else
-                    {
-                        ViewBag.Prediction = "Error: Unable to make a prediction.";
-                    }
-                }
-
-                _logger.LogInformation("Prediction executed successfully.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error during prediction: {ex.Message}");
-                ViewBag.Prediction = "Error during prediction.";
-            }
-
-            return View("ReviewOrders");
-        }
-
         public IActionResult ReviewOrders()
         {
             var records = _repo.Orders.ToList();
+            var customers = _repo.Customers.ToList();
             var predictions = new List<FraudPrediction>();
-
             var class_type_dict = new Dictionary<int, string>
             {
                 { 0, "Not Fraud" },
@@ -220,12 +174,59 @@ namespace _2_4AurorasBricks2.Controllers
 
             foreach (var record in records)
             {
+                var customer = customers.FirstOrDefault(c => c.CustomerId == record.CustomerId);
+
                 var input = new List<float>
                 {
-                    record.TransactionId, record.CustomerId
-                    //record.TransactionId, record.CustomerId, record.Date, record.DayOfWeek,
-                    //record.Time, record.EntryMode, record.Amount, record.TypeOfTransaction,
-                    //record.CountryOfTransaction, record.ShippingAddress, record.Bank, record.TypeOfCard
+                    (float)record.TransactionId, 
+                    (float)record.CustomerId,
+                    (float)record.Time,
+
+                    // Fix amount if it's null by doing ??
+                    (float)(record.Amount ?? 0),
+
+                    (float)customer.Age,
+
+                    record.DayOfWeek == "Mon" ? 1 : 0,
+                    record.DayOfWeek == "Sat" ? 1 : 0,
+                    record.DayOfWeek == "Sun" ? 1 : 0,
+                    record.DayOfWeek == "Thu" ? 1 : 0,
+                    record.DayOfWeek == "Tue" ? 1 : 0,
+                    record.DayOfWeek == "Wed" ? 1 : 0,
+
+                    record.EntryMode == "PIN" ? 1 : 0,
+                    record.EntryMode == "Tap" ? 1 : 0,
+
+                    record.TypeOfTransaction == "Online" ? 1 : 0,
+                    record.TypeOfTransaction == "POS" ? 1 : 0,
+
+                    record.CountryOfTransaction  == "India" ? 1 : 0,
+                    record.CountryOfTransaction  == "Russia" ? 1 : 0,
+                    record.CountryOfTransaction  == "USA" ? 1 : 0,
+                    record.CountryOfTransaction  == "United Kingdom" ? 1 : 0,
+
+
+                    (record.ShippingAddress ?? record.CountryOfTransaction) == "India" ? 1 : 0,
+                    (record.ShippingAddress ?? record.CountryOfTransaction) == "Russia" ? 1 : 0,
+                    (record.ShippingAddress ?? record.CountryOfTransaction) == "USA" ? 1 : 0,
+                    (record.ShippingAddress ?? record.CountryOfTransaction) == "United Kingdom" ? 1 : 0,
+
+                    record.Bank == "HSBC" ? 1 : 0,
+                    record.Bank == "Halifax" ? 1 : 0,
+                    record.Bank == "Lloyds" ? 1 : 0,
+                    record.Bank == "Metro" ? 1 : 0,
+                    record.Bank == "Monzo" ? 1 : 0,
+                    record.Bank == "RBS" ? 1 : 0,
+
+                    record.TypeOfCard == "Visa" ? 1 : 0,
+
+                    customer.CountryOfResidence  == "India" ? 1 : 0,
+                    customer.CountryOfResidence  == "Russia" ? 1 : 0,
+                    customer.CountryOfResidence  == "USA" ? 1 : 0,
+                    customer.CountryOfResidence  == "United Kingdom" ? 1 : 0,
+
+                    customer.Gender == "M" ? 1 : 0
+
                 };
                 var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
 

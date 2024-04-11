@@ -32,24 +32,22 @@
         <tbody>
             @foreach (var item in Model)
             {
-                if (classTypeDict[item.Order.Fraud] != item.Prediction)
-                {
-                    <tr>
-                        <td>@item.Order.TransactionId</td>
-                        <td>@item.Order.CustomerId</td>
-                        <td>@item.Order.Date</td>
-                        <td>@item.Order.DayOfWeek</td>
-                        <td>@item.Order.Time</td>
-                        <td>@item.Order.EntryMode</td>
-                        <td>@item.Order.Amount</td>
-                        <td>@item.Order.TypeOfTransaction</td>
-                        <td>@item.Order.CountryOfTransaction</td>
-                        <td>@item.Order.ShippingAddress</td>
-                        <td>@item.Order.Bank</td>
-                        <td>@item.Order.TypeOfCard</td>
-                        <td>@item.Order.Fraud</td>
-                    </tr>
-                }
+                <tr>
+                    <td>@item.Order.TransactionId</td>
+                    <td>@item.Order.CustomerId</td>
+                    <td>@item.Order.Date</td>
+                    <td>@item.Order.DayOfWeek</td>
+                    <td>@item.Order.Time</td>
+                    <td>@item.Order.EntryMode</td>
+                    <td>@item.Order.Amount</td>
+                    <td>@item.Order.TypeOfTransaction</td>
+                    <td>@item.Order.CountryOfTransaction</td>
+                    <td>@item.Order.ShippingAddress</td>
+                    <td>@item.Order.Bank</td>
+                    <td>@item.Order.TypeOfCard</td>
+                    <td>@item.Order.Fraud</td>
+                    <td class="prediction-cell">@item.Prediction</td>
+                </tr>
             }
         </tbody>
     </table>
