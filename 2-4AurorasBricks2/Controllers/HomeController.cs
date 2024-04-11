@@ -158,13 +158,36 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
-        public IActionResult ProductDetail()
+        public IActionResult ProductDetail(int id)
         {
-            return View();
+            var product = _repo.Products.ToList();
+
+            //var recommendation1 = _repo.Products.Single(y => y.Name == product.Name);
+            return View(id);
         }
-        public IActionResult Products()
+        public IActionResult Products(int pageNum)
         {
-            return View();
+            int pageSize = 10;
+
+            //Ensure the page number is at least 1
+            pageNum = Math.Max(1, pageNum);
+
+            var viewModel = new ProjectsListViewModel
+            {
+                Products = _repo.Products
+                    .OrderBy(p => p.ProductId)
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Products.Count()
+                },
+
+            };
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
