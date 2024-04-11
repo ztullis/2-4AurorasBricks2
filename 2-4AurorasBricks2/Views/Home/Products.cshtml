@@ -5,25 +5,44 @@
 }
 
 @model ProjectsListViewModel
-
-<div class="container products-container">
-    <h1>View All Products</h1>
-    <div class="row">
-        @foreach (Product p in Model.Products)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product">
-                    <img src="@p.ImgLink" width="100" />
-                    <h3>@p.Name</h3>
-                    <p>@(p.Description.Length > 50 ? p.Description.Substring(0, 50) + "..." : p.Description)</p>
-                    <p>Price: $@p.Price</p>
-                    <!-- Add more product information as needed -->
-                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@p.ProductId" />
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
-                    </form>
+<br />
+<section class="page-section about-heading">
+    <div class="container">
+        <div class="about-heading-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bg-faded p-5">
+                        <div style="background-color:rgba(245, 245, 245, 1); padding: 20px;">
+                            <h1>View All Products</h1>
+                            <div class="row">
+                                @foreach (Product p in Model.Products)
+                                {
+                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                                        <div class="card h-100 d-block">
+                                            <div class="card-body d-flex flex-column justify-content-between align-items-center">
+                                            <img class="card-img-top" src="@p.ImgLink" style="height: 200px"/>
+                                                <div class="text-center">
+                                                    <h3 class="card-title">@(p.Name.Length > 25 ? p.Name.Substring(0, 25) + "..." : p.Name)</h3>
+                                                        <p class="card-text">@(p.Description.Length > 50 ? p.Description.Substring(0, 50) + "..." : p.Description)</p>
+                                                        <p class="card-text"><strong>Price:</strong> <em>$@p.Price</em></p>
+                                                        <!-- Add more product information as needed -->
+                                                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                                            <input type="hidden" name="productId" value="@p.ProductId" />
+                                                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                                            <a class="btn btn-primary" asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId">View More Info</a><br />
+                                                        </form>
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        }
+        </div>
     </div>
-</div>
+    <div page-model="@Model.PaginationInfo" page-action="EditProducts" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" page-url-projectType="@Model.CurrentProjectType" class="btn-group pull-right m-1"></div>
+</section>
