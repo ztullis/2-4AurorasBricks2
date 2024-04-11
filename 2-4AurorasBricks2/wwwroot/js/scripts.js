@@ -34,3 +34,48 @@ $(document).ready(function () {
         $("#confirmation-overlay").hide();
     });
 });
+
+
+
+// Toggle buttons on the main page to go through each item that is being recommended
+document.addEventListener('DOMContentLoaded', function () {
+    var cards = document.querySelectorAll('.card');
+    var currentCardIndex = 0; // Start with the first card
+
+    cards.forEach(function (card, index) {
+        if (index !== 0) {
+            card.style.display = 'none';
+        }
+    });
+
+    function showNextCard() {
+        cards[currentCardIndex].style.display = 'none';
+        currentCardIndex = (currentCardIndex + 1) % cards.length;
+        cards[currentCardIndex].style.display = 'block';
+    }
+
+    function showPrevCard() {
+        cards[currentCardIndex].style.display = 'none';
+        currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length;
+        cards[currentCardIndex].style.display = 'block';
+    }
+
+    document.querySelectorAll('.nextButton').forEach(function (button) {
+        button.addEventListener('click', showNextCard);
+    });
+
+    document.querySelectorAll('.prevButton').forEach(function (button) {
+        button.addEventListener('click', showPrevCard);
+    });
+});
+
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,5 @@
 //using _2_4AurorasBricks2.Data;
+
 using _2_4AurorasBricks2.Models;
 using Azure.Identity;
 using Microsoft.AspNetCore.Builder;
@@ -112,6 +113,16 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute("pagination", "{pageNum}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
+//app.MapControllerRoute(
+//    name: "pagination",
+//    pattern: "EditProducts/{pageNum?}",
+//    defaults: new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
+
+//app.MapControllerRoute("pagination", "{pageNum}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
 
 app.MapRazorPages();
 

@@ -1758,6 +1758,8 @@ progress {
     --bs-table-hover-color: var(--bs-body-color);
     --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
     width: 100%;
+    overflow-x: auto; /* Add horizontal scrollbar if table exceeds width */
+    overflow-y: auto;
     margin-bottom: 1rem;
     color: var(--bs-table-color);
     vertical-align: top;
@@ -3648,6 +3650,7 @@ textarea.form-control-lg {
   margin-bottom: 0;
   list-style: none;
 }
+
 
 .nav-link {
   display: block;
@@ -11120,3 +11123,13 @@ input[type="date"] {
     width: 50%; /* Adjust as needed */
 }
 
+.navbar-nav a {
+    vertical-align: middle;
+    padding-top: 20px; /* Adjust as needed */
+    padding-bottom: 10px;
+}
+
+.products-container {
+    background-color: white;
+    padding: 20px; /* Optional: Add padding around the products */
+}
