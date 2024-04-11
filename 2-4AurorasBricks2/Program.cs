@@ -102,6 +102,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute("pagination", "{pageNum}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
+//app.MapControllerRoute(
+//    name: "pagination",
+//    pattern: "EditProducts/{pageNum?}",
+//    defaults: new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
+
+//app.MapControllerRoute("pagination", "{pageNum}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
 app.MapRazorPages();
 
 app.Run();

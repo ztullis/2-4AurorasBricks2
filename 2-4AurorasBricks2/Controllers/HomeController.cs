@@ -7,6 +7,7 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
+using NuGet.ProjectModel;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -60,14 +61,15 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult EditProducts(int pageNum)
         {
-            int pageSize = 5;
+            int pageSize = 10;
 
-            pageNum = Math.Max(pageNum, 1);
+            //Ensure the page number is at least 1
+            pageNum = Math.Max(1, pageNum);
 
             var viewModel = new ProjectsListViewModel
             {
                 Products = _repo.Products
-                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                    .OrderBy(p => p.ProductId)
                     .Skip((pageNum - 1) * pageSize)
                     .Take(pageSize),
 
@@ -76,10 +78,11 @@ namespace _2_4AurorasBricks2.Controllers
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
                     TotalItems = _repo.Products.Count()
-                }
-            };
+                },
 
+            };
             return View(viewModel);
+
         }
 
         [HttpGet]
