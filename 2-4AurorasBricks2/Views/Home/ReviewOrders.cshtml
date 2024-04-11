@@ -1,5 +1,54 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<_2_4AurorasBricks2.Models.FraudPrediction>
 @{
+    ViewData["Title"] = "Review Orders";
+    var classTypeDict = new Dictionary<int, string>
+    {
+        {0, "Not Fraud"},
+        {1, "Fraud"}
+    };
 }
+
+<h2>Fraudulent Order Predictions Table</h2>
+<div class="full-width-table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Customer ID</th>
+                <th>Date</th>
+                <th>Day Of Week</th>
+                <th>Time</th>
+                <th>Entry Mode</th>
+                <th>Amount</th>
+                <th>Transaction Type</th>
+                <th>Country of Transaction</th>
+                <th>Shipping Address</th>
+                <th>Bank</th>
+                <th>Type of Card</th>
+                <th>Fraud</th>
+                <th class="prediction-cell">Predicted Fraud</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Order.TransactionId</td>
+                    <td>@item.Order.CustomerId</td>
+                    <td>@item.Order.Date</td>
+                    <td>@item.Order.DayOfWeek</td>
+                    <td>@item.Order.Time</td>
+                    <td>@item.Order.EntryMode</td>
+                    <td>@item.Order.Amount</td>
+                    <td>@item.Order.TypeOfTransaction</td>
+                    <td>@item.Order.CountryOfTransaction</td>
+                    <td>@item.Order.ShippingAddress</td>
+                    <td>@item.Order.Bank</td>
+                    <td>@item.Order.TypeOfCard</td>
+                    <td>@item.Order.Fraud</td>
+                    <td class="prediction-cell">@item.Prediction</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
