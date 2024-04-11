@@ -1,27 +1,38 @@
 //using _2_4AurorasBricks2.Data;
 
 using _2_4AurorasBricks2.Models;
+using Azure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.Extensions.Hosting;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-        ?? throw new InvalidOperationException("Connection string not found.");
+// Retrieve the connection strings from environment variables
+var connectionStringIntex2Security = Environment.GetEnvironmentVariable("Intex2Security")
+    ?? builder.Configuration.GetConnectionString("Intex2Security");
+var connectionStringLego = Environment.GetEnvironmentVariable("Lego")
+    ?? builder.Configuration.GetConnectionString("Lego");
+
+// Setup services with connection strings from Key Vault
+builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<LoginDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(connectionStringIntex2Security); // Use the connection string retrieved from Key Vault
 });
 
 builder.Services.AddDbContext<LegoContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:LegoConnection"]);
+    options.UseSqlServer(connectionStringLego); // Use the connection string retrieved from Key Vault
 });
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     options =>
