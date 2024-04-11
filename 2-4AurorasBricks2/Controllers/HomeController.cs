@@ -182,73 +182,20 @@ namespace _2_4AurorasBricks2.Controllers
 
             var productViewModel = new SingleProductViewModel
             {
-                Products = new List<Product> { originalProduct }, // Include the original product in the view model
+                Products = _repo.Products.Where(x => x.ProductId == id),
+/*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
                 RecommendedProducts = new Dictionary<string, List<Product>>
                 {
-                    { "rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },
-                    { "rec_2", allProducts.Where(p => p.Rec_2 == originalProduct.Name).ToList() },
-                    { "rec_3", allProducts.Where(p => p.Rec_3 == originalProduct.Name).ToList() },
-                    { "rec_4", allProducts.Where(p => p.Rec_4 == originalProduct.Name).ToList() },
-                    { "rec_5", allProducts.Where(p => p.Rec_5 == originalProduct.Name).ToList() }
-                }
-            };
-
-            return View(productViewModel);  
-
-
-
-
-
-
-            // Find all products whose names match the values of rec_1 and rec_2 columns
-            var recommendedProducts = db.Products
-                .Where(p => p.Name == rec1Value || p.Name == rec2Value)
-                .ToList();
-
-            // Create the view model
-            var productViewModel = new SingleProductViewModel
-            {
-                Products = db.Products.Where(p => p.ProductId == id),
-                RecommendedProducts = new Dictionary<string, List<string>>
-                {
-                    { "rec_1", recommendedProducts.Where(p => p.Name == rec1Value).Select(p => p.Name).ToList() },
-                    { "rec_2", recommendedProducts.Where(p => p.Name == rec2Value).Select(p => p.Name).ToList() }
+                    { "Rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },
+                    { "Rec_2", allProducts.Where(p => p.Rec_2 == originalProduct.Name).ToList() },
+                    { "Rec_3", allProducts.Where(p => p.Rec_3 == originalProduct.Name).ToList() },
+                    { "Rec_4", allProducts.Where(p => p.Rec_4 == originalProduct.Name).ToList() },
+                    { "Rec_5", allProducts.Where(p => p.Rec_5 == originalProduct.Name).ToList() }
                 }
             };
 
             return View(productViewModel);
         }
-                //var products = _repo.Products.ToList();
-                //var productViewModels = new List<SingleProductViewModel>();
-
-                //foreach (var product in products)
-                //{
-                //    var recommendedProducts = new Dictionary<string, List<string>>();
-
-                //    for (int i = 1; i <= 5; i++)
-                //    {
-                //        var columnName = "Rec_" + i;
-                //        var relatedProductNames = _repo.Products
-                //            .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name)
-                //        var relatedProductNames = _repo.Products
-                //            .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name && p.ProductId != product.ProductId)
-                //            .Select(p => p.Name)
-                //            .ToList();
-
-                //        recommendedProducts.Add(columnName, relatedProductNames);
-                //    }
-
-                //    var productViewModel = new SingleProductViewModel
-                //    {
-                //        Products = _repo.Products.Where(p => p.ProductId == product.ProductId), // Assuming you want to include the current product
-                //        RecommendedProducts = recommendedProducts
-                //    };
-
-                //    productViewModels.Add(productViewModel);
-                //}
-
-                //return View(productViewModels);
-            }
 
         public IActionResult Products(int pageNum)
         {
