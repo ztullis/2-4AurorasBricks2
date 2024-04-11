@@ -3,7 +3,6 @@ using _2_4AurorasBricks2.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<LoginDbContext>(options =>
 {
-    options.UseSqlite(connectionString);
+    options.UseSqlServer(connectionString);
 });
 
 builder.Services.AddDbContext<LegoContext>(options =>
