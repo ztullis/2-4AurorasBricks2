@@ -69,6 +69,8 @@ namespace _2_4AurorasBricks2.Controllers
         [HttpPost]
         public IActionResult AddProducts(Product response)
         {
+            var maxProductId = _repo.Products.Max(p => (int?)p.ProductId) ?? 0;
+            response.ProductId = maxProductId + 1;
 
             _repo.AddProduct(response);
             return RedirectToAction("EditProducts");
