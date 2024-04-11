@@ -4,15 +4,16 @@
 @{
 }
 
-@model List<SingleProductViewModel>
+@model SingleProductViewModel
 
 <h2>Products and Their Recommended Products</h2>
 
-@foreach (var productViewModel in Model)
+@foreach (Product p in Model.Products)
 {
-    <h1>Product ID: @productViewModel.Products.FirstOrDefault().Name</h1>
-    <h3>Price: $@productViewModel.Products.FirstOrDefault().Price</h3>
-    <img src="@productViewModel.Products.FirstOrDefault().ImgLink" />
+    <h1>Product ID: @p.Name</h1>
+    <h3>Price: $@p.Price</h3>
+    <img src="@p.ImgLink" style="width:100"/>
+}
 
 
     <h4>Recommended Products:</h4>
@@ -24,10 +25,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var recommendedProducts in productViewModel.RecommendedProducts)
+            @foreach (var recommendedProducts in Model.RecommendedProducts)
             {
                 <tr>
-                    <td>@recommendedProducts.Key</td>
+                    <td>@recommendedProducts.</td>
                     <td>
                         @foreach (var recommendedProductName in recommendedProducts.Value)
                         {
