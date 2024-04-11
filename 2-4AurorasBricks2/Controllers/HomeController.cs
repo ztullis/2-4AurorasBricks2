@@ -160,11 +160,37 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult ProductDetail(int id)
         {
-            var product = _repo.Products.ToList();
+            var products = _repo.Products.ToList();
+            var productViewModels = new List<SingleProductViewModel>();
 
-            //var recommendation1 = _repo.Products.Single(y => y.Name == product.Name);
-            return View(id);
+            foreach (var product in products)
+            {
+                var recommendedProducts = new Dictionary<string, List<string>>();
+
+                // Assuming you have rec_1, rec_2, rec_3, rec_4, and rec_5 columns
+                for (int i = 1; i <= 5; i++)
+                {
+                    var columnName = "Rec" + i;
+                    var relatedProductNames = _repo.Products
+                        .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name && p.ProductId != product.ProductId)
+                        .Select(p => p.Name)
+                        .ToList();
+
+                    recommendedProducts.Add(columnName, relatedProductNames);
+                }
+
+                var productViewModel = new SingleProductViewModel
+                {
+                    Products = _repo.Products.Where(p => p.ProductId == product.ProductId), // Assuming you want to include the current product
+                    RecommendedProducts = recommendedProducts
+                };
+
+                productViewModels.Add(productViewModel);
+            }
+
+            return View(productViewModels);
         }
+
         public IActionResult Products(int pageNum)
         {
             int pageSize = 10;
