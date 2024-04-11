@@ -3,3 +3,26 @@
 *@
 @{
 }
+
+@model ProjectsListViewModel
+
+<div class="container">
+    <h1>View All Products</h1>
+    <div class="row">
+        @foreach (Product p in Model.Products)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product">
+                    <h3>@p.Name</h3>
+                    <p>@p.Description</p>
+                    <p>@p.Price</p>
+                    <!-- Add more product information as needed -->
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>
