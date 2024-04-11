@@ -15,8 +15,23 @@
     <img src="@p.ImgLink" style="width:100"/>
 }
 
+@if (Model.RecommendedProducts != null && Model.RecommendedProducts.Any())
+{
+    <h3>Recommended Products:</h3>
+    @foreach (var category in Model.RecommendedProducts)
+    {
+        <h4>@category.Key</h4>
+        foreach (var recommendedProduct in category.Value)
+        {
+            <div>
+                <p>@recommendedProduct.Name</p>
+                <img src="@recommendedProduct.ImgLink" alt="Recommended Product Image" style="width:100px;">
+            </div>
+        }
+    }
+}
 
-    <h4>Recommended Products:</h4>
+@*     <h4>Recommended Products:</h4>
     <table>
         <thead>
             <tr>
@@ -39,6 +54,6 @@
                 </tr>
             }
         </tbody>
-    </table>
+    </table> *@
 }
 
