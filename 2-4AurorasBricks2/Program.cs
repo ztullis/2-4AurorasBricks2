@@ -20,6 +20,9 @@ var connectionStringIntex2Security = Environment.GetEnvironmentVariable("Intex2S
 var connectionStringLego = Environment.GetEnvironmentVariable("Lego")
     ?? builder.Configuration.GetConnectionString("Lego");
 
+// Retrieve the email password from an environment variable
+var emailPassword = Environment.GetEnvironmentVariable("EmailPassword");
+
 // Setup services with connection strings from Key Vault
 builder.Services.AddControllersWithViews();
 
@@ -31,6 +34,15 @@ builder.Services.AddDbContext<LoginDbContext>(options =>
 builder.Services.AddDbContext<LegoContext>(options =>
 {
     options.UseSqlServer(connectionStringLego); // Use the connection string retrieved from Key Vault
+});
+builder.Services.AddTransient<ISenderEmail, EmailSender>();
+builder.Services.AddSingleton<IEmailConfiguration>(new EmailConfiguration
+{
+    MailServer = builder.Configuration["EmailSettings:MailServer"],
+    MailPort = int.Parse(builder.Configuration["EmailSettings:MailPort"]),
+    SenderName = builder.Configuration["EmailSettings:SenderName"],
+    FromEmail = builder.Configuration["EmailSettings:FromEmail"],
+    Password = emailPassword // Ensure this is the password from the environment variable
 });
 
 
@@ -106,7 +118,7 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 
-app.UseAuthentication();    
+app.UseAuthentication();
 
 app.UseAuthorization();
 
