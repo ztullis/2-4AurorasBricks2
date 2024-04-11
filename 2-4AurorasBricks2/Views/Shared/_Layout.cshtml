@@ -29,13 +29,16 @@
             <span class="site-heading-lower">Aurora's Bricks</span>
         </h1>
     </header>
-            <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+            <nav class="navbar navbar-expand-lg py-lg-4" id="mainNav">
                 <div class="container">
             <a class="navbar-brand text-uppercase fw-bold d-lg-none" href="index.html">Aurora's Bricks</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto">
+                <ul class="navbar-nav mx-auto-left">
+                    <li class="nav-item px-lg-4">
+                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
                     <li class="nav-item px-lg-4">
                         <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Products">Products</a>
                     </li>
@@ -106,12 +109,12 @@
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="account" asp-action="register">
+                                    <a class="nav-link text-uppercase" asp-controller="account" asp-action="register">
                                         Register
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="account" asp-action="login">
+                                    <a class="nav-link text-uppercase" asp-controller="account" asp-action="login">
                                         Login
                                     </a>
                                 </li>
@@ -128,9 +131,11 @@
             </main>
         </div>
 
-        <footer class="border-top footer text-muted">
+        <footer class="footer text-faded2 text-center py-5">
             <div class="container">
-                &copy; 2024 - Darla - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <p class="m-0 small">
+                    &copy; 2024 - AurorasBricks2-4 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </p>
             </div>
         </footer>
 
@@ -139,7 +144,7 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        
+        <script src="~/js/scripts.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>

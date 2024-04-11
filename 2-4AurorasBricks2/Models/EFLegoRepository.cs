@@ -18,29 +18,33 @@ namespace _2_4AurorasBricks2.Models
         public void AddProduct(Product product)
         {
             //_context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Products ON;");
-            _context.Products.Add(product);
-            _context.SaveChanges();
+            //_context.Products.Add(product);
+            //_context.SaveChanges();
 
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Ensure IDENTITY_INSERT is ON before inserting
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Products ON");
 
-            //using (var transaction = _context.Database.BeginTransaction())
-            //{
-            //    try
-            //    {
-            //        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Products ON;");
-            //        _context.Products.Add(product);
-            //        _context.SaveChanges();
-            //        transaction.Commit();
-            //    }
-            //    catch (Exception)
-            //    {
-            //        transaction.Rollback();
-            //        throw;
-            //    }
-            //    finally
-            //    {
-            //        _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Products OFF;");
-            //    }
-            //}
+                    _context.Products.Add(product);
+                    _context.SaveChanges();
+
+                    // Ensure IDENTITY_INSERT is OFF after inserting
+                    _context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Products OFF");
+
+                    // Commit transaction if no errors occurred
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    // Rollback transaction if an error occurred
+                    transaction.Rollback();
+                    throw; // Re-throw the exception to maintain the error information
+                }
+            }
+
 
 
 

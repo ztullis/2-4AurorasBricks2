@@ -1,18 +1,23 @@
 ﻿@{
     ViewData["Title"] = @ViewBag.Message;
 }
+<br />
+<div class="container container-form">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
 
-<div class="row">
-    <div class="col-md-6">
-        <h1>@ViewBag.Message</h1>
-        <form asp-action="ResendConfirmationEmail" asp-controller="Account" method="post">
-            <div class="form-group">
-                <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+            <div>
+                <h1>@ViewBag.Message</h1>
+                <form asp-action="ResendConfirmationEmail" asp-controller="Account" method="post">
+                    <div class="form-group">
+                        <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">@ViewBag.Message</button>
+                    </div>
+                </form>
             </div>
-            <br />
-            <div class="form-group">
-                <button class="btn btn-primary" type="submit">@ViewBag.Message</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>

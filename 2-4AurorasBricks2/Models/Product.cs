@@ -8,7 +8,6 @@ namespace _2_4AurorasBricks2.Models;
 public partial class Product
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ProductId { get; set; }
 
     public string Name { get; set; } = null!;
