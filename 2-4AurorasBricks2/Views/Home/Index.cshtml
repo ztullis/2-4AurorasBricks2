@@ -7,7 +7,6 @@
 <section class="page-section clearfix">
     <div class="container">
         <div class="intro">
-            <img class="intro-img img-fluid mb-3 mb-lg-0 rounded" src="assets/img/intro.jpg" alt="..." />
             <div class="intro-text left-0 text-center bg-faded p-5 rounded">
                 <h2 class="section-heading mb-4">
                     <span class="section-heading-upper">Explore</span>
@@ -28,7 +27,7 @@
                         {
                             <div class="card" data-product-id="@id">
                                 <div class="items">
-                                    <img src="@product.ImgLink" style="width:100px" />
+                                    <img src="@product.ImgLink" style="height:150px"/>
                                     <h2>@product.Name</h2>
                                     <h3>Price: $@product.Price</h3>
                                     <a href="#" class="add-to-cart-btn">Add to Cart</a>
@@ -65,44 +64,3 @@
         </div>
     </div>
 </section>
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var cards = document.querySelectorAll('.card');
-        var currentCardIndex = 0; // Start with the first card
-
-        // Initially, hide all cards except the first one
-        cards.forEach(function (card, index) {
-            if (index !== 0) {
-                card.style.display = 'none';
-            }
-        });
-
-        // Show the next card
-        function showNextCard() {
-            cards[currentCardIndex].style.display = 'none'; // Hide current card
-            currentCardIndex = (currentCardIndex + 1) % cards.length; // Move to next card, loop back to first after last
-            cards[currentCardIndex].style.display = 'block'; // Show next card
-        }
-
-        // Show the previous card
-        function showPrevCard() {
-            cards[currentCardIndex].style.display = 'none'; // Hide current card
-            currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length; // Move to previous card, loop back to last after first
-            cards[currentCardIndex].style.display = 'block'; // Show previous card
-        }
-
-        // Attach click event to each "Next" button
-        document.querySelectorAll('.nextButton').forEach(function (button) {
-            button.addEventListener('click', showNextCard);
-        });
-
-        // Attach click event to each "Prev" button
-        document.querySelectorAll('.prevButton').forEach(function (button) {
-            button.addEventListener('click', showPrevCard);
-        });
-    });
-
-
-</script>

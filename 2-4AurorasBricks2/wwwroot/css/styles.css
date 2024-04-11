@@ -684,6 +684,10 @@ progress {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
+.row-product {
+  display: flex;
+  flex-wrap: wrap;
+}
 .row > * {
   flex-shrink: 0;
   width: 100%;
@@ -1758,6 +1762,8 @@ progress {
     --bs-table-hover-color: var(--bs-body-color);
     --bs-table-hover-bg: rgba(0, 0, 0, 0.075);
     width: 100%;
+    overflow-x: auto; /* Add horizontal scrollbar if table exceeds width */
+    overflow-y: auto;
     margin-bottom: 1rem;
     color: var(--bs-table-color);
     vertical-align: top;
@@ -11125,4 +11131,9 @@ input[type="date"] {
     vertical-align: middle;
     padding-top: 20px; /* Adjust as needed */
     padding-bottom: 10px;
+}
+
+.products-container {
+    background-color: white !important;
+    padding: 20px; /* Optional: Add padding around the products */
 }

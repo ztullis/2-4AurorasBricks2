@@ -7,6 +7,7 @@ using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
 using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
+using NuGet.ProjectModel;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -60,14 +61,15 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult EditProducts(int pageNum)
         {
-            int pageSize = 5;
+            int pageSize = 10;
 
-            pageNum = Math.Max(pageNum, 1);
+            //Ensure the page number is at least 1
+            pageNum = Math.Max(1, pageNum);
 
             var viewModel = new ProjectsListViewModel
             {
                 Products = _repo.Products
-                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                    .OrderBy(p => p.ProductId)
                     .Skip((pageNum - 1) * pageSize)
                     .Take(pageSize),
 
@@ -76,10 +78,11 @@ namespace _2_4AurorasBricks2.Controllers
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
                     TotalItems = _repo.Products.Count()
-                }
-            };
+                },
 
+            };
             return View(viewModel);
+
         }
 
         [HttpGet]
@@ -155,13 +158,68 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
-        public IActionResult ProductDetail()
+        public IActionResult ProductDetail(int id)
         {
-            return View();
+            // Retrieve the product with the specified ID
+            var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == id);
+
+            var allProducts = new List<Product>();
+
+            for (int i = 1; i <= 5; i++)
+            {
+                // Extract the value of the current rec_X column from the chosen product
+                var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
+
+                // If the value is not null or empty, find products with the same name
+                if (!string.IsNullOrEmpty(recValue))
+                {
+                    var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
+
+                    // Add the found products to the list of all products
+                    allProducts.AddRange(recProducts);
+                }
+            }
+
+            var productViewModel = new SingleProductViewModel
+            {
+                Products = _repo.Products.Where(x => x.ProductId == id),
+/*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
+                RecommendedProducts = new Dictionary<string, List<Product>>
+                {
+                    { "Rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },
+                    { "Rec_2", allProducts.Where(p => p.Rec_2 == originalProduct.Name).ToList() },
+                    { "Rec_3", allProducts.Where(p => p.Rec_3 == originalProduct.Name).ToList() },
+                    { "Rec_4", allProducts.Where(p => p.Rec_4 == originalProduct.Name).ToList() },
+                    { "Rec_5", allProducts.Where(p => p.Rec_5 == originalProduct.Name).ToList() }
+                }
+            };
+
+            return View(productViewModel);
         }
-        public IActionResult Products()
+
+        public IActionResult Products(int pageNum)
         {
-            return View();
+            int pageSize = 10;
+
+            //Ensure the page number is at least 1
+            pageNum = Math.Max(1, pageNum);
+
+            var viewModel = new ProjectsListViewModel
+            {
+                Products = _repo.Products
+                    .OrderBy(p => p.ProductId)
+                    .Skip((pageNum - 1) * pageSize)
+                    .Take(pageSize),
+
+                PaginationInfo = new PaginationInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = pageSize,
+                    TotalItems = _repo.Products.Count()
+                },
+
+            };
+            return View(viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

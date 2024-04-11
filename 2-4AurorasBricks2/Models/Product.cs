@@ -27,4 +27,9 @@ public partial class Product
     public string Description { get; set; } = null!;
 
     public string Category { get; set; } = null!;
+    public string? Rec_1 { get; set; }
+    public string? Rec_2 { get; set; }
+    public string? Rec_3 { get; set; }
+    public string? Rec_4 { get; set; }
+    public string? Rec_5 { get; set; }
 }
