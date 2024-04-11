@@ -2,6 +2,8 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model ProjectsListViewModel
+
 <section class="page-section clearfix">
     <div class="container">
         <div class="intro">
@@ -15,6 +17,30 @@
                 <div class="intro-button mx-auto">
                     <a class="btn btn-primary btn-xl" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
                 </div>
+
+
+                @{
+                    var orderedProductIds = new List<int> { 13, 21, 20, 12, 23 };
+                    foreach (var id in orderedProductIds)
+                    {
+                        var product = Model.Products.FirstOrDefault(x => x.ProductId == id);
+                        if (product != null)
+                        {
+                            <div class="card" data-product-id="@id">
+                                <div class="items">
+                                    <img src="@product.ImgLink" style="width:100px" />
+                                    <h2>@product.Name</h2>
+                                    <h3>Price: $@product.Price</h3>
+                                    <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                </div>
+                                <button class="prevButton">←</button>
+                                <button class="nextButton">→</button>
+                            </div>
+                        }
+                    }
+                }
+
+
             </div>
         </div>
     </div>
@@ -39,3 +65,44 @@
         </div>
     </div>
 </section>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var cards = document.querySelectorAll('.card');
+        var currentCardIndex = 0; // Start with the first card
+
+        // Initially, hide all cards except the first one
+        cards.forEach(function (card, index) {
+            if (index !== 0) {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show the next card
+        function showNextCard() {
+            cards[currentCardIndex].style.display = 'none'; // Hide current card
+            currentCardIndex = (currentCardIndex + 1) % cards.length; // Move to next card, loop back to first after last
+            cards[currentCardIndex].style.display = 'block'; // Show next card
+        }
+
+        // Show the previous card
+        function showPrevCard() {
+            cards[currentCardIndex].style.display = 'none'; // Hide current card
+            currentCardIndex = (currentCardIndex - 1 + cards.length) % cards.length; // Move to previous card, loop back to last after first
+            cards[currentCardIndex].style.display = 'block'; // Show previous card
+        }
+
+        // Attach click event to each "Next" button
+        document.querySelectorAll('.nextButton').forEach(function (button) {
+            button.addEventListener('click', showNextCard);
+        });
+
+        // Attach click event to each "Prev" button
+        document.querySelectorAll('.prevButton').forEach(function (button) {
+            button.addEventListener('click', showPrevCard);
+        });
+    });
+
+
+</script>
