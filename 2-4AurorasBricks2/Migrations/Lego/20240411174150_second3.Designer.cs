@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _2_4AurorasBricks2.Models;
 
@@ -11,9 +12,11 @@ using _2_4AurorasBricks2.Models;
 namespace _2_4AurorasBricks2.Migrations.Lego
 {
     [DbContext(typeof(LegoContext))]
-    partial class LegoContextModelSnapshot : ModelSnapshot
+    [Migration("20240411174150_second3")]
+    partial class second3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
