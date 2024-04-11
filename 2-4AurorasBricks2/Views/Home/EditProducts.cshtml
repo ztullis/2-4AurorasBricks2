@@ -14,12 +14,12 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="bg-faded rounded p-5">
-                        <div style="background-color:#f8f9fa; padding: 20px;">
+                        <div style="background-color:rgba(245, 245, 245, 1); padding: 20px;">
                             
                                 <br />
                                 <h2 style="margin-bottom: 20px;">Our Lego Sets!</h2>
                                 <a class="btn btn-primary" asp-controller="Home" asp-action="AddProducts">Add a Product</a><br />
-                            
+                                <br /><br />
 
 
                             <div class="table">
@@ -35,7 +35,7 @@
                                             <th>Primary Color</th>
                                             <th>Secondary Color</th>
                                             <th>Description</th>
-                                            <th colspan="2">Manage Products</th>
+                                            <th>Manage Products</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -69,8 +69,9 @@
                                                 <td><a class="btn btn-primary">Delete</a></td>
 
                                                 <td>@p.Description</td> *@
-                                                <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a></td>
-                                                <td><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
+                                                
+                                                <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
+                                               
 
                     </tr>
                 }

@@ -4176,7 +4176,7 @@ textarea.form-control-lg {
     --bs-navbar-brand-color: #fff;
     --bs-navbar-brand-hover-color: #fff;
     --bs-navbar-toggler-border-color: rgba(255, 255, 255, 0.1);
-    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 .card {
@@ -7584,6 +7584,10 @@ textarea.form-control-lg {
 .mx-auto {
   margin-right: auto !important;
   margin-left: auto !important;
+}
+
+.mx-auto-left {
+    margin-left: -8px !important;
 }
 
 .my-0 {
@@ -11093,19 +11097,26 @@ input[type="date"] {
 }
 
 .overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    display: none;
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black */
-    z-index: 1000; /* ensure it's on top of other elements */
-    display: none; /* initially hidden */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000; /* Ensure overlay appears on top of other content */
+    max-width: 80%; /* Limit width to 80% of viewport */
+    max-height: 80%; /* Limit height to 80% of viewport */
+    overflow: auto; /* Enable scrolling if content exceeds dimensions */
 }
 
 .overlay-content {
-    position: relative;
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: white;
 }
+
+.equal-width {
+    width: 50%; /* Adjust as needed */
+}
+
