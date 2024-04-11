@@ -43,14 +43,18 @@
                         <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Products">Products</a>
                     </li>
                     <li class="nav-item px-lg-4">
-                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Cart">Cart</a>
+                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Cart" >Cart</a>
+                    </li>
+                    @* <li class="nav-item px-lg-4">
+                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Cart"><img src="~/assets/img/cart-fotor-bg-remover-20240410201436.png" style="max-height: 35px; max-width: 35px; margin-left: 5px;" /></a>
+                    </li> *@
+                    <li class="nav-item px-lg-4">
+                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="AboutUs" >About Us</a>
                     </li>
                     <li class="nav-item px-lg-4">
-                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Privacy" >Privacy</a>
                     </li>
-                    <li class="nav-item px-lg-4">
-                        <a class="nav-link text-uppercase" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+                    
 
                 </ul>
 
@@ -61,7 +65,7 @@
                             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
+                                    <a class="nav-item px-lg-4 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Manage</a>
 
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                         <a class="dropdown-item" asp-controller="Administration" asp-action="ListUsers">Users</a>
@@ -79,7 +83,7 @@
                                 <form method="post" id="logoutForm" asp-controller="Account" asp-action="Logout" style="display: none;"></form>
 
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, @User?.Identity?.Name</a>
+                                    <a class="nav-item px-lg-4 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, @User?.Identity?.Name</a>
 
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                                         <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
@@ -126,6 +130,7 @@
 
 
         <div class="container">
+        <partial name="_CookieConsentPartial" />
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>

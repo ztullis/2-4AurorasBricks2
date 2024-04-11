@@ -3649,6 +3649,7 @@ textarea.form-control-lg {
   list-style: none;
 }
 
+
 .nav-link {
   display: block;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
@@ -11120,3 +11121,8 @@ input[type="date"] {
     width: 50%; /* Adjust as needed */
 }
 
+.navbar-nav a {
+    vertical-align: middle;
+    padding-top: 20px; /* Adjust as needed */
+    padding-bottom: 10px;
+}
