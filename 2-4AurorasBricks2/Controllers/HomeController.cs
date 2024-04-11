@@ -180,6 +180,21 @@ namespace _2_4AurorasBricks2.Controllers
                 }
             }
 
+            var productViewModel = new SingleProductViewModel
+            {
+                Products = new List<Product> { originalProduct }, // Include the original product in the view model
+                RecommendedProducts = new Dictionary<string, List<Product>>
+                {
+                    { "rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },
+                    { "rec_2", allProducts.Where(p => p.Rec_2 == originalProduct.Name).ToList() },
+                    { "rec_3", allProducts.Where(p => p.Rec_3 == originalProduct.Name).ToList() },
+                    { "rec_4", allProducts.Where(p => p.Rec_4 == originalProduct.Name).ToList() },
+                    { "rec_5", allProducts.Where(p => p.Rec_5 == originalProduct.Name).ToList() }
+                }
+            };
+
+            return View(productViewModel);  
+
 
 
 
