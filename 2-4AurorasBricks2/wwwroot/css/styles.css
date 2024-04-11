@@ -11128,3 +11128,8 @@ input[type="date"] {
     padding-top: 20px; /* Adjust as needed */
     padding-bottom: 10px;
 }
+
+.products-container {
+    background-color: white;
+    padding: 20px; /* Optional: Add padding around the products */
+}
