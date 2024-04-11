@@ -160,36 +160,80 @@ namespace _2_4AurorasBricks2.Controllers
         }
         public IActionResult ProductDetail(int id)
         {
-            var products = _repo.Products.ToList();
-            var productViewModels = new List<SingleProductViewModel>();
+            // Retrieve the product with the specified ID
+            var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == id);
 
-            foreach (var product in products)
+            var allProducts = new List<Product>();
+
+            for (int i = 1; i <= 5; i++)
             {
-                var recommendedProducts = new Dictionary<string, List<string>>();
+                // Extract the value of the current rec_X column from the chosen product
+                var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
 
-                // Assuming you have rec_1, rec_2, rec_3, rec_4, and rec_5 columns
-                for (int i = 1; i <= 5; i++)
+                // If the value is not null or empty, find products with the same name
+                if (!string.IsNullOrEmpty(recValue))
                 {
-                    var columnName = "Rec" + i;
-                    var relatedProductNames = _repo.Products
-                        .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name && p.ProductId != product.ProductId)
-                        .Select(p => p.Name)
-                        .ToList();
+                    var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
 
-                    recommendedProducts.Add(columnName, relatedProductNames);
+                    // Add the found products to the list of all products
+                    allProducts.AddRange(recProducts);
                 }
-
-                var productViewModel = new SingleProductViewModel
-                {
-                    Products = _repo.Products.Where(p => p.ProductId == product.ProductId), // Assuming you want to include the current product
-                    RecommendedProducts = recommendedProducts
-                };
-
-                productViewModels.Add(productViewModel);
             }
 
-            return View(productViewModels);
+
+
+
+
+
+            // Find all products whose names match the values of rec_1 and rec_2 columns
+            var recommendedProducts = db.Products
+                .Where(p => p.Name == rec1Value || p.Name == rec2Value)
+                .ToList();
+
+            // Create the view model
+            var productViewModel = new SingleProductViewModel
+            {
+                Products = db.Products.Where(p => p.ProductId == id),
+                RecommendedProducts = new Dictionary<string, List<string>>
+                {
+                    { "rec_1", recommendedProducts.Where(p => p.Name == rec1Value).Select(p => p.Name).ToList() },
+                    { "rec_2", recommendedProducts.Where(p => p.Name == rec2Value).Select(p => p.Name).ToList() }
+                }
+            };
+
+            return View(productViewModel);
         }
+                //var products = _repo.Products.ToList();
+                //var productViewModels = new List<SingleProductViewModel>();
+
+                //foreach (var product in products)
+                //{
+                //    var recommendedProducts = new Dictionary<string, List<string>>();
+
+                //    for (int i = 1; i <= 5; i++)
+                //    {
+                //        var columnName = "Rec_" + i;
+                //        var relatedProductNames = _repo.Products
+                //            .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name)
+                //        var relatedProductNames = _repo.Products
+                //            .Where(p => p.GetType().GetProperty(columnName).GetValue(p).ToString() == product.Name && p.ProductId != product.ProductId)
+                //            .Select(p => p.Name)
+                //            .ToList();
+
+                //        recommendedProducts.Add(columnName, relatedProductNames);
+                //    }
+
+                //    var productViewModel = new SingleProductViewModel
+                //    {
+                //        Products = _repo.Products.Where(p => p.ProductId == product.ProductId), // Assuming you want to include the current product
+                //        RecommendedProducts = recommendedProducts
+                //    };
+
+                //    productViewModels.Add(productViewModel);
+                //}
+
+                //return View(productViewModels);
+            }
 
         public IActionResult Products(int pageNum)
         {
