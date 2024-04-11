@@ -172,7 +172,7 @@ namespace _2_4AurorasBricks2.Controllers
 
         public IActionResult ReviewOrders()
         {
-            var records = _repo.Orders.ToList();
+            var records = _repo.Orders.Take(20).ToList();
             var customers = _repo.Customers.ToList();
             var predictions = new List<FraudPrediction>();
             var class_type_dict = new Dictionary<int, string>
