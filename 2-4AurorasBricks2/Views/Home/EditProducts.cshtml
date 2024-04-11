@@ -22,8 +22,8 @@
                                 <br /><br />
 
 
-                            <div class="table">
-                                <table>
+                            <div style="overflow-x: auto;">
+                                <table style="width: 100%; table-layout: fixed;">
                                     <thead>
                                         <tr>
                                             <th>Image</th>
@@ -73,10 +73,10 @@
                                                 <td><a class="btn btn-primary" asp-controller="Home" asp-action="EditProductsSingle" asp-route-id="@p.ProductId">Edit</a><a class="btn btn-danger" id="show-overlay-button" asp-controller="Home" asp-action="DeleteProducts" asp-route-id="@p.ProductId">Delete</a></td>
                                                
 
-                    </tr>
-                }
+                                                </tr>
+                                                    }
                 <!-- Add more rows as needed -->
-            </tbody>
+                                       </tbody>
             
                                 </table>
                             </div>
