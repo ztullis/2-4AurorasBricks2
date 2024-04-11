@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using _2_4AurorasBricks2.Models;
 using Microsoft.Identity.Client;
 using _2_4AurorasBricks2.Models.ViewModels;
+using System.Drawing.Printing;
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -20,7 +21,13 @@ namespace _2_4AurorasBricks2.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var viewModel = new ProjectsListViewModel
+            {
+                Products = _repo.Products
+                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
