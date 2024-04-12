@@ -5,39 +5,74 @@
 }
 
 @model SingleProductViewModel
-<section class="page-section">
+
+<br /><br />
+<section class="page-section about-heading">
     <div class="container">
-        <div class="intro">
-            <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-                <h2 class="section-heading mb-4">Products and Their Recommended Products</h2>
+        <div class="about-heading-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-text text-center bg-faded p-5 rounded">
+                        <div style="background-color:rgba(245, 245, 245, 1); padding: 20px;">
+                            <h2 class="section-heading mb-4">Products and Their Recommended Products</h2>
 
-                @foreach (Product p in Model.Products)
-                {
-                    <h1>Product ID: @p.Name</h1>
-                    <h3>Price: $@p.Price</h3>
-                    <img src="@p.ImgLink" style="width:100"/>
-                }
-
-                @if (Model.RecommendedProducts != null && Model.RecommendedProducts.Any())
-                {
-                    <h3>Recommended Products:</h3>
-                    @foreach (var category in Model.RecommendedProducts)
-                    {
-                        <h4>@category.Key</h4>
-                        foreach (var recommendedProduct in category.Value)
-                        {
-                            <div class="card" data-product-id="@recommendedProduct.ProductId">
-                                <div class="items">
-                                    <p>@recommendedProduct.Name</p>
-                                    <img src="@recommendedProduct.ImgLink" alt="Recommended Product Image" style="width:100%"/>
-                                    <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                            @foreach (Product p in Model.Products)
+                            {
+                                <h1>Product ID: @p.Name</h1>
+                                <h3>Price: $@p.Price</h3>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img class="card-img-product" src="@p.ImgLink"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Description:</strong></p><br />
+                                        <div class="description">
+                                            @if (p.Description.Length > 150)
+                                            {
+                                                <span class="short-description">@Html.Raw(p.Description.Substring(0, 150))</span>
+                                                <span class="full" style="display:none;">@Html.Raw(p.Description)</span>
+                                                <button class="more-button" onclick="toggleDescription(this)">More...</button>
+                                            }
+                                            else
+                                            {
+                                                @Html.Raw(p.Description)
+                                            }
+                                        </div>
+                                        <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                    </div>
                                 </div>
-                                <button class="prevButton">←</button>
-                                <button class="nextButton">→</button>
-                            </div>
-                        }
-                    }
-                }
+                            }
+
+                            @if (Model.RecommendedProducts != null && Model.RecommendedProducts.Any())
+                            {
+                                <h3>Recommended Products:</h3>
+                                @foreach (var category in Model.RecommendedProducts)
+                                {
+                                 
+                                    <h4>@category.Key</h4>
+                                    foreach (var recommendedProduct in category.Value)
+                                    {
+                                        <div class="card" data-product-id="@recommendedProduct.ProductId">
+                                            <div class="items">
+                                                <br />
+                                                
+                                                <img class="card-img" src="@recommendedProduct.ImgLink" alt="Recommended Product Image"/>
+                                                
+                                                
+                                                <h3>@recommendedProduct.Name</h3>
+                                                    
+                                                
+                                                <br /><a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                            </div>
+                                            <button class="prevButton">←</button>
+                                            <button class="nextButton">→</button>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
