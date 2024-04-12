@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy"
+    @* <meta http-equiv="Content-Security-Policy"
           content="base-uri 'self';
                default-src 'self';
                img-src 'self' data: https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com https://www.yourwebsite.com/lib/photos;
@@ -18,7 +18,7 @@
                script-src 'self' https://code.jquery.com;
                style-src 'self' https://fonts.googleapis.com;
                font-src 'self' https://fonts.gstatic.com;
-               upgrade-insecure-requests;">
+               upgrade-insecure-requests;"> *@
     <title>@ViewData["Title"] - Aurora's Bricks</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -98,7 +98,7 @@
                                     <a class="nav-item px-lg-4 dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Welcome, @User?.Identity?.Name</a>
 
                                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                        <a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();">Logout</a>
+                                    <a class="dropdown-item" id="logoutLink" href="javascript:void(0);">Logout</a>
 
                                         <a class="dropdown-item" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
 
@@ -162,6 +162,8 @@
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/scripts.js" defer></script>
+        <script src="~/js/logout.js" asp-append-version="true"></script>
+
         @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>

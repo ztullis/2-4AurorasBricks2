@@ -1,4 +1,5 @@
-﻿namespace _2_4AurorasBricks2.Models
+﻿
+namespace _2_4AurorasBricks2.Models
 {
     public class Cart
     {
@@ -28,7 +29,7 @@
 
         public virtual void Clear() => Lines.Clear();
 
-        public decimal CalculateTotal() => Lines.Sum(x => 25 * x.Quantity);
+        public decimal CalculateTotal() => Lines.Sum(x => x.Product.Price * x.Quantity);
         //THIS BELOW is another way to do the above lambda function.
 
         //public decimal CalculateTotal()

@@ -1,5 +1,6 @@
 ﻿using System.Net.Mail;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace _2_4AurorasBricks2.Models
 {
@@ -10,28 +11,22 @@ namespace _2_4AurorasBricks2.Models
 
     public class EmailSender : ISenderEmail
     {
-        private readonly IConfiguration _configuration;
+        private readonly IEmailConfiguration _emailConfig;
 
-        public EmailSender(IConfiguration configuration)
+        public EmailSender(IEmailConfiguration emailConfig)
         {
-            _configuration = configuration;
+            _emailConfig = emailConfig;
         }
 
         public Task SendEmailAsync(string ToEmail, string Subject, string Body, bool IsBodyHtml = false)
         {
-            string MailServer = _configuration["EmailSettings:MailServer"];
-            string FromEmail = _configuration["EmailSettings:FromEmail"];
-            string Password = _configuration["EmailSettings:Password"];
-            int MailPort = int.Parse(_configuration["EmailSettings:MailPort"]);
-
-
-            var client = new SmtpClient(MailServer, MailPort)
+            var client = new SmtpClient(_emailConfig.MailServer, _emailConfig.MailPort)
             {
-                Credentials = new NetworkCredential(FromEmail, Password),
+                Credentials = new NetworkCredential(_emailConfig.FromEmail, _emailConfig.Password),
                 EnableSsl = true,
             };
 
-            MailMessage mailMessage = new MailMessage(FromEmail, ToEmail, Subject, Body)
+            MailMessage mailMessage = new MailMessage(_emailConfig.FromEmail, ToEmail, Subject, Body)
             {
                 IsBodyHtml = IsBodyHtml
             };
