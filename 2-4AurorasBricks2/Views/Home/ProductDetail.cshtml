@@ -28,7 +28,12 @@
                                         <p><strong>Description:</strong></p>
                                         <p>@p.Description</p><br />
                                         <h3>Price: $@p.Price</h3>
-                                        <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                        <form id=@p.ProductId method="post" asp-page="/Cart">
+                                            <input type="hidden" asp-for="@p.ProductId" />
+                                            <input type="hidden" name="returnUrl" value="@ViewContext.HttpContext.Request.PathAndQuery()" />
+                                            <button type="submit" class="button button-project">Add To Cart</button>
+                                            <a class="button button-project" asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId">View More Info</a><br />
+                                        </form>
                                     </div>
                                 </div>
                             }
@@ -50,9 +55,10 @@
                                                 
                                                 <h2>@recommendedProduct.Name</h2>
                                                 <h3><strong>Price:</strong> $@recommendedProduct.Price</h3>
-                                                    
-                                                
-                                                <br /><a href="#" class="add-to-cart-btn">Add to Cart</a>
+
+
+                                                <br />
+                                                <a class="button button-project" asp-controller="Home" asp-action="ProductDetail" asp-route-id="@recommendedProduct.ProductId">View More Info</a>
                                             </div>
                                             <button class="prevButton">←</button>
                                             <button class="nextButton">→</button>
