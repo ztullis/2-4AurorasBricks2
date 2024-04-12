@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model ProjectsListViewModel
+@model IndexHybridViewModel
 
 <br /><br />
 <section class="page-section about-heading">
@@ -27,8 +27,36 @@
                                 </div>
                                 <div class="col-md-6">
                                     @{
-                                        var orderedProductIds = new List<int> { 13, 21, 20, 12, 23 };
-                                        foreach (var id in orderedProductIds)
+                                        // var recommend = Model.RecommendedProducts;
+                                        var preload = Model.PreLoadedRecommendations;
+
+                                        // // This was meant to be code that would process through and assign them if they had passed through authentication.
+
+                                        // if (recommend != null)
+                                        // {
+                                        //     foreach (var recordId in recommend)
+                                        //     {
+                                        //         foreach (var i; i > 5; i++;) {
+                                                    
+                                        //         }
+                                        //         var product = Model.Products.FirstOrDefault(x => x.ProductId == recordId[record][1]);
+                                        //         if (product != null)
+                                        //         {
+                                        //             <div class="card" data-product-id="@recordId">
+                                        //                 <div class="items">
+                                        //                     <img src="@product.ImgLink" style="height:150px" />
+                                        //                     <h2>@product.Name</h2>
+                                        //                     <h3>Price: $@product.Price</h3>
+                                        //                     <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                        //                 </div>
+                                        //                 <button class="prevButton">←</button>
+                                        //                 <button class="nextButton">→</button>
+                                        //             </div>
+                                        //         }
+                                        //     }
+                                        // }
+
+                                        foreach (var id in preload)
                                         {
                                             var product = Model.Products.FirstOrDefault(x => x.ProductId == id);
                                             if (product != null)
@@ -47,7 +75,6 @@
                                                     <button class="prevButton button button-project button-small">←</button>
                                                     <button class="nextButton button button-project button-small">→</button>
                                                 </div>
-
                                             }
                                         }
                                     }
