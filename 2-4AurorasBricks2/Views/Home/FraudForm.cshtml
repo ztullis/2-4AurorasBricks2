@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "Create Order";
+}
+@model Order
+
+
+<h2>We have been receiving fraudulent orders. To secure your order, please fill out the following information.</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <input asp-for="CustomerId" class="form-control" type="hidden"/>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" type="date" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DayOfWeek" class="control-label"></label>
+        <input asp-for="DayOfWeek" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Time" class="control-label"></label>
+        <input asp-for="Time" class="form-control" type="time" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EntryMode" class="control-label"></label>
+        <input asp-for="EntryMode" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Amount" class="control-label"></label>
+        <input asp-for="Amount" class="form-control" type="number" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TypeOfTransaction" class="control-label"></label>
+        <input asp-for="TypeOfTransaction" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CountryOfTransaction" class="control-label"></label>
+        <input asp-for="CountryOfTransaction" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShippingAddress" class="control-label"></label>
+        <textarea asp-for="ShippingAddress" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Bank" class="control-label"></label>
+        <input asp-for="Bank" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TypeOfCard" class="control-label"></label>
+        <input asp-for="TypeOfCard" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Fraud" class="control-label"></label>
+        <select asp-for="Fraud" class="form-control">
+            <option value="">Please select</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
