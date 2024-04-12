@@ -18,7 +18,7 @@ namespace _2_4AurorasBricks2.Controllers
         private readonly InferenceSession _session;
         private readonly ILogger<HomeController> _logger;
         private readonly string _onnxPath;
-        //Some people have made an ONX Path Variable and defined it to the _session model
+
         public HomeController(ILegoRepository temp, ILogger<HomeController> logger, IHostEnvironment hostEnvironment)
         {
             _repo = temp;
@@ -228,23 +228,112 @@ namespace _2_4AurorasBricks2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult ReviewOrders()
+        [HttpPost]
+        public IActionResult Predict(int TransactionId, int CustomerId, byte Time, short Amount, Decimal Age, string DayOfWeek, string EntryMode, string TypeOfTransaction, string CountryOfTransaction, string ShippingAddress, string Bank, string TypeOfCard, string CountryOfResidence, string Gender)
         {
-            var records = _repo.Orders.Take(20).ToList();
-            var customers = _repo.Customers.ToList();
-            var predictions = new List<FraudPrediction>();
             var class_type_dict = new Dictionary<int, string>
             {
-                { 0, "Not Fraud" },
-                { 1, "Fraud" }
+                {0, "0" },
+                {1, "1"}
             };
 
-            foreach (var record in records)
+            try
+            {
+                var input = new List<float>
+                {
+                    (float)TransactionId,
+                    (float)CustomerId,
+                    (float)Time,
+                    (float)Amount,
+                    (float)Age,
+
+                    DayOfWeek == "Mon" ? 1 : 0,
+                    DayOfWeek == "Sat" ? 1 : 0,
+                    DayOfWeek == "Sun" ? 1 : 0,
+                    DayOfWeek == "Thu" ? 1 : 0,
+                    DayOfWeek == "Tue" ? 1 : 0,
+                    DayOfWeek == "Wed" ? 1 : 0,
+
+                    EntryMode == "PIN" ? 1 : 0,
+                    EntryMode == "Tap" ? 1 : 0,
+
+                    TypeOfTransaction == "Online" ? 1 : 0,
+                    TypeOfTransaction == "POS" ? 1 : 0,
+
+                    CountryOfTransaction  == "India" ? 1 : 0,
+                    CountryOfTransaction  == "Russia" ? 1 : 0,
+                    CountryOfTransaction  == "USA" ? 1 : 0,
+                    CountryOfTransaction  == "United Kingdom" ? 1 : 0,
+
+                    (ShippingAddress ?? CountryOfTransaction) == "India" ? 1 : 0,
+                    (ShippingAddress ?? CountryOfTransaction) == "Russia" ? 1 : 0,
+                    (ShippingAddress ?? CountryOfTransaction) == "USA" ? 1 : 0,
+                    (ShippingAddress ?? CountryOfTransaction) == "United Kingdom" ? 1 : 0,
+
+                    Bank == "HSBC" ? 1 : 0,
+                    Bank == "Halifax" ? 1 : 0,
+                    Bank == "Lloyds" ? 1 : 0,
+                    Bank == "Metro" ? 1 : 0,
+                    Bank == "Monzo" ? 1 : 0,
+                    Bank == "RBS" ? 1 : 0,
+
+                    TypeOfCard == "Visa" ? 1 : 0,
+
+                    CountryOfResidence  == "India" ? 1 : 0,
+                    CountryOfResidence  == "Russia" ? 1 : 0,
+                    CountryOfResidence  == "USA" ? 1 : 0,
+                    CountryOfResidence  == "United Kingdom" ? 1 : 0,
+
+                    Gender == "M" ? 1 : 0
+                };
+                var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
+
+                var inputs = new List<NamedOnnxValue>
+                {
+                    NamedOnnxValue.CreateFromTensor("float_input", inputTensor)
+                };
+
+                using (var results = _session.Run(inputs))
+                {
+                    var prediction = results.FirstOrDefault(item => item.Name == "output_label")?.AsTensor<long>().ToArray();
+                    if (prediction != null && prediction.Length > 0)
+                    {
+                        var fraudDecision = class_type_dict.GetValueOrDefault((int)prediction[0], "Unknown");
+                        ViewBag.Prediction = fraudDecision;
+                    }
+                    else
+                    {
+                        ViewBag.Prediction = "Error: Unable to make a prediction";
+                    }
+                }
+                _logger.LogInformation("Prediction executed successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error during the prediction: {ex.Message}");
+                ViewBag.Prediction = "Error during prediction.";
+            }
+            return View("Index");
+        }
+
+        public IActionResult ReviewOrders() //Home Controller for Reviewing Orders
+        {
+            var records = _repo.Orders.Take(20).ToList(); // I need to pass the ORDERS and the CUSTOMERS to accurately use the ONNX file, which expects values from both tables.
+            var customers = _repo.Customers.ToList();
+            var predictions = new List<FraudPrediction>();
+            var class_type_dict = new Dictionary<int, string> // This is what I want to return.
+            {
+                { 0, "0" }, // I may change the "Not Fraud" to be a 0 in the future
+                { 1, "1" }
+            };
+
+            foreach (var record in records) // Going through each record 
             {
                 var customer = customers.FirstOrDefault(c => c.CustomerId == record.CustomerId);
 
                 var input = new List<float>
                 {
+                    // Reassigning anything that isn't float to a float.
                     (float)record.TransactionId, 
                     (float)record.CustomerId,
                     (float)record.Time,
@@ -254,7 +343,7 @@ namespace _2_4AurorasBricks2.Controllers
 
                     (float)customer.Age,
 
-                    record.DayOfWeek == "Mon" ? 1 : 0,
+                    record.DayOfWeek == "Mon" ? 1 : 0, // I need to dummy code the data so it goes through my ONNX file properly.
                     record.DayOfWeek == "Sat" ? 1 : 0,
                     record.DayOfWeek == "Sun" ? 1 : 0,
                     record.DayOfWeek == "Thu" ? 1 : 0,
@@ -295,7 +384,7 @@ namespace _2_4AurorasBricks2.Controllers
                     customer.Gender == "M" ? 1 : 0
 
                 };
-                var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count });
+                var inputTensor = new DenseTensor<float>(input.ToArray(), new[] { 1, input.Count }); // I'm going to pass the input into an array.
 
                 var inputs = new List<NamedOnnxValue>
                 {
