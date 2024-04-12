@@ -6,7 +6,7 @@
 @addTagHelper *, 2-4AurorasBricks2
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@model ProjectsListViewModel
+@model ProjectsViewModel
 
 
 <br />
@@ -25,7 +25,7 @@
 
 
                             <div style="overflow-x: auto;">
-                                <table style="width: 100%; table-layout: fixed;">
+                                <table class="table" style="width: 100%; table-layout: fixed;">
                                     <thead>
                                         <tr>
                                             <th>Image</th>
@@ -82,11 +82,12 @@
             
                                 </table>
                             </div>
+                            <div page-model="@Model.PaginationInfo" page-action="EditProducts" page-class-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" class="btn-group pull-right m-1"
+                                 page-url-legoType="@Model.CurrentLegoCategory" page-url-legoColor="@Model.CurrentLegoColor" page-url-pageSize="@Model.CurrentPageSize"></div>
                         </div>
                       </div>
                  </div>
               </div>
          </div>
     </div>
-    <div page-model="@Model.PaginationInfo" page-action="EditProducts" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" page-url-projectType="@Model.CurrentProjectType" class="btn-group pull-right m-1"></div>
 </section>
