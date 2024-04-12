@@ -9,6 +9,7 @@ using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
 using NuGet.ProjectModel;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -36,7 +37,7 @@ namespace _2_4AurorasBricks2.Controllers
                 _logger.LogError($"Error loading the ONNX model: {ex.Message}");
             }
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var Model = new IndexHybridViewModel
@@ -120,6 +121,7 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult EditProducts(int pageNum)
         {
             int pageSize = 10;
@@ -146,13 +148,14 @@ namespace _2_4AurorasBricks2.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddProducts()
         {
             var newProduct = new Product();
             return View(newProduct);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddProducts(Product response)
         {
@@ -171,6 +174,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View(response);
             //}
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditProductsSingle(int id)
         {
@@ -179,7 +183,7 @@ namespace _2_4AurorasBricks2.Controllers
 
             return View("AddProducts", productToEdit);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EditProductsSingle(Product updatedProduct)
         {
@@ -198,7 +202,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View("AddProducts", updatedProduct);
             //}
         }
-        
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteProducts(int id)
         {
@@ -207,7 +211,7 @@ namespace _2_4AurorasBricks2.Controllers
 
             return View("DeleteProducts", productToDelete);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult DeleteProducts(Product productToDelete)
         {
@@ -215,10 +219,12 @@ namespace _2_4AurorasBricks2.Controllers
 
             return RedirectToAction("EditProducts");
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult EditUsers()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult ProductDetail(int id)
         {
             // Retrieve the product with the specified ID
@@ -258,6 +264,7 @@ namespace _2_4AurorasBricks2.Controllers
             return View(productViewModel);
         }
 
+        [AllowAnonymous]
         public IActionResult Products(int pageNum, string? legoType, string? legoColor, int pageSize = 5 )
         {
 
@@ -381,7 +388,7 @@ namespace _2_4AurorasBricks2.Controllers
             }
             return View("Index");
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult ReviewOrders() //Home Controller for Reviewing Orders
         {
             var records = _repo.Orders.Take(20).ToList(); // I need to pass the ORDERS and the CUSTOMERS to accurately use the ONNX file, which expects values from both tables.
