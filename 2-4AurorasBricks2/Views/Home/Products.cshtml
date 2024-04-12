@@ -1,10 +1,8 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
+﻿
 @model ProjectsListViewModel
+
+<h1>Aurora's Bricks</h1>
+
 <br />
 <section class="page-section about-heading">
     <div class="container">
@@ -17,25 +15,7 @@
                             <div class="row">
                                 @foreach (Product p in Model.Products)
                                 {
-                                    <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-                                        <div class="card h-100 d-block">
-                                            <div class="card-body d-flex flex-column justify-content-between align-items-center">
-                                            <img class="card-img-top" src="@p.ImgLink" style="height: 200px"/>
-                                                <div class="text-center">
-                                                    <h3 class="card-title">@(p.Name.Length > 25 ? p.Name.Substring(0, 25) + "..." : p.Name)</h3>
-                                                        <p class="card-text">@(p.Description.Length > 50 ? p.Description.Substring(0, 50) + "..." : p.Description)</p>
-                                                        <p class="card-text"><strong>Price:</strong> <em>$@p.Price</em></p>
-                                                        <!-- Add more product information as needed -->
-                                                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
-                                                            <input type="hidden" name="productId" value="@p.ProductId" />
-                                                            <button type="submit" class="btn btn-primary">Add to Cart</button>
-                                                            <a class="btn btn-primary" asp-controller="Home" asp-action="ProductDetail" asp-route-id="@p.ProductId">View More Info</a><br />
-                                                        </form>
-                                            
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <partial name="ProjectSummary" model="p" />
                                 }
                             </div>
                         </div>
@@ -44,5 +24,5 @@
             </div>
         </div>
     </div>
-    <div page-model="@Model.PaginationInfo" page-action="EditProducts" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" page-url-projectType="@Model.CurrentProjectType" class="btn-group pull-right m-1"></div>
+    <div page-model="@Model.PaginationInfo" page-action="Products" page-classes-enabled="true" page-class="btn" page-class-normal="btn-outline-dark" page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
 </section>
