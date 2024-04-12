@@ -11233,3 +11233,40 @@ input[type="date"] {
 .font-time {
     font-size: 60px !important;
 }
+
+.filter-bar {
+    background-color: #f9f9f9;
+    padding: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.filter-container {
+    flex: 0 1 calc(33.33% - 20px); /* Adjust the width to fit three containers in a row */
+    margin: 10px; /* Adjust the spacing between containers */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.filter-container h3 {
+    margin-bottom: 10px;
+}
+
+.filter-container a {
+    display: block;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.filter-container a:hover {
+    background-color: #f3f3f3;
+}
+
