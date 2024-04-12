@@ -45,6 +45,16 @@ builder.Services.AddSingleton<IEmailConfiguration>(new EmailConfiguration
     Password = emailPassword // Ensure this is the password from the environment variable
 });
 
+// Google Authenticator
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = configuration["GoogleClientId"];
+    googleOptions.ClientSecret = configuration["GoogleClientSecret"];
+});
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     options =>
@@ -111,6 +121,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios.
     app.UseHsts(); // Now configured via IServiceCollection
 }
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

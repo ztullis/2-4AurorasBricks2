@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
+using _2_4AurorasBricks2.Models.ViewModels;
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -84,28 +85,26 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string? ReturnUrl = null)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
-            ViewData["ReturnUrl"] = ReturnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            LoginViewModel model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            return View(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel model, string? ReturnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
         {
             if (ModelState.IsValid)
             {
                 // Attempt to sign in the user using their username and password
                 var user = await userManager.FindByNameAsync(model.Username);
-                var userEmail = user.Email;
+                // var userEmail = user.Email;
 
                 if (user != null && !user.EmailConfirmed && (await userManager.CheckPasswordAsync(user, model.Password)))
                 {
@@ -119,9 +118,9 @@ namespace _2_4AurorasBricks2.Controllers
                 {
                     // Handle successful login
                     // Check if the ReturnUrl is not null and is a local URL
-                    if (!string.IsNullOrEmpty(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
-                        return Redirect(ReturnUrl);
+                        return Redirect(returnUrl);
                     }
                     else
                     {
@@ -135,11 +134,12 @@ namespace _2_4AurorasBricks2.Controllers
                     // Generate a 2FA token, send that token to user Email and Phone Number
                     // and redirect to the 2FA verification view
                     var TwoFactorAuthenticationToken = await userManager.GenerateTwoFactorTokenAsync(user, "Email");
+                    var userEmail = user.Email;
 
                     //Sending Email
                     await emailSender.SendEmailAsync(user.Email, "2FA Token", $"Your 2FA Token is {TwoFactorAuthenticationToken}", false);
 
-                    return RedirectToAction("VerifyTwoFactorToken", "Account", new {Email = userEmail, ReturnUrl, model.RememberMe, TwoFactorAuthenticationToken });
+                    return RedirectToAction("VerifyTwoFactorToken", "Account", new { Email = userEmail, returnUrl, model.RememberMe, TwoFactorAuthenticationToken });
                 }
                 if (result.IsLockedOut)
                 {
@@ -151,6 +151,8 @@ namespace _2_4AurorasBricks2.Controllers
                 {
                     // Invalid login attempt
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    model = new LoginViewModel();
+                    model.ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                     return View(model);
                 }
             }
@@ -158,6 +160,8 @@ namespace _2_4AurorasBricks2.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
 
         [AllowAnonymous]
         [HttpPost]
@@ -671,6 +675,79 @@ namespace _2_4AurorasBricks2.Controllers
                 }
                 return View(model);
             }
+
         }
+        
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            // Request a redirect to the external login provider
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl, string? remoteError)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            LoginViewModel loginViewModel = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                return View("Login", loginViewModel);
+            }
+            // Get the login information about the user from the external login provider
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError(string.Empty, "Error loading external login information.");
+                return View("Login", loginViewModel);
+            }
+            // If the user already has a login (i.e., if there is a record in AspNetUserLogins table)
+            // then sign-in the user with this external login provider
+            var signInResult = await signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (signInResult.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            // If there is no record in AspNetUserLogins table, the user may not have a local account
+            else
+            {
+                // Get the email claim value
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (email != null)
+                {
+                    // Create a new user without password if we do not have a user already
+                    var user = await userManager.FindByEmailAsync(email);
+                    if (user == null)
+                    {
+                        user = new ApplicationUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                            LastName = info.Principal.FindFirstValue(ClaimTypes.Surname),
+                        };
+                        //This will create a new user into the AspNetUsers table without password
+                        await userManager.CreateAsync(user);
+                    }
+                    // Add a login (i.e., insert a row for the user in AspNetUserLogins table)
+                    await userManager.AddLoginAsync(user, info);
+                    //Then Signin the User
+                    await signInManager.SignInAsync(user, isPersistent: false);
+                    return LocalRedirect(returnUrl);
+                }
+                // If we cannot find the user email we cannot continue
+                ViewBag.ErrorTitle = $"Email claim not received from: {info.LoginProvider}";
+                ViewBag.ErrorMessage = "Please contact support on info@dotnettutorials.net";
+                return View("Error");
+            }
+        }
+
+
     }
 }
