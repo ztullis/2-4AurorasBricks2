@@ -123,8 +123,8 @@ app.Use(async (context, next) =>
         "img-src 'self' http://www.w3.org https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com https://www.yourwebsite.com/lib/photos; " +
         "object-src 'none'; " +
         "script-src 'self' https://code.jquery.com; " +
-        "style-src 'self' https://fonts.googleapis.com; " +
-        "font-src 'self' https://fonts.gstatic.com; " +
+        "style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " +
+        "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
         "upgrade-insecure-requests;");
     await next.Invoke();
 });
