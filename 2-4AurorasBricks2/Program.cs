@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Hosting;
+using System;
+using Google.Api.Gax.ResourceNames;
+using Google.Cloud.RecaptchaEnterprise.V1;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,21 @@ var emailPassword = Environment.GetEnvironmentVariable("EmailPassword");
 
 // Setup services with connection strings from Key Vault
 builder.Services.AddControllersWithViews();
+
+//Recapcha for google 
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddDefaultPolicy(
+//        policy =>
+//        {
+//            policy.AllowAnyOrigin()
+//                .AllowAnyHeader()
+//                .AllowAnyMethod();
+//        });
+//});
+
+
 
 builder.Services.AddDbContext<LoginDbContext>(options =>
 {
@@ -51,6 +69,7 @@ services.AddAuthentication().AddGoogle(googleOptions =>
     googleOptions.ClientId = builder.Configuration["GoogleClientId"];
     googleOptions.ClientSecret = builder.Configuration["GoogleClientSecret"];
 });
+//builder.Services.AddHttpClient();
 
 
 
@@ -143,7 +162,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
-
+app.UseCors();
 app.UseSession();
 
 app.UseRouting();
