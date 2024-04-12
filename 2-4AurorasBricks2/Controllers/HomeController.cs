@@ -129,7 +129,7 @@ namespace _2_4AurorasBricks2.Controllers
             //Ensure the page number is at least 1
             pageNum = Math.Max(1, pageNum);
 
-            var viewModel = new ProjectsListViewModel
+            var viewModel = new ProjectsViewModel
             {
                 Products = _repo.Products
                     .OrderBy(p => p.ProductId)
@@ -202,7 +202,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View("AddProducts", updatedProduct);
             //}
         }
-        [Authorize(Roles = "Admin")]
+
         [HttpGet]
         public IActionResult DeleteProducts(int id)
         {
