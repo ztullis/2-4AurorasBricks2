@@ -52,6 +52,7 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
+
         public IActionResult AboutUs()
         {
             return View();
