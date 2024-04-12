@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-@model ProjectsListViewModel
+@model IndexHybridViewModel
 
 <br /><br />
 <section class="page-section about-heading">
@@ -14,36 +14,69 @@
                         <div style="background-color:rgba(245, 245, 245, 1); padding: 20px;">
                             
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-6 d-flex justify-content-center align-items-center flex-column">
                                     <h2 class="section-heading mb-4">
                                         <span class="section-heading-upper">Explore</span>
                                         <span class="section-heading-lower">Our Sets!</span>
                                     </h2>
-                                    <p class="mb-3">Here are some of our most recommended sets to consider building as you explore!</p>
+                                    <div class="font-size: 60px !important;">
+                                        <h4 class="mb-3;">Here are some of our most recommended sets to consider building as you explore!</h4>
+                                    </div>
                                     <br /><br />
-                                    <div class="intro-button mx-auto">
-                                        <a class="btn btn-primary btn-xl" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
+                                    <div>
+                                        <a class="button button-project" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     @{
-                                        var orderedProductIds = new List<int> { 13, 21, 20, 12, 23 };
-                                        foreach (var id in orderedProductIds)
+                                        // var recommend = Model.RecommendedProducts;
+                                        var preload = Model.PreLoadedRecommendations;
+
+                                        // // This was meant to be code that would process through and assign them if they had passed through authentication.
+
+                                        // if (recommend != null)
+                                        // {
+                                        //     foreach (var recordId in recommend)
+                                        //     {
+                                        //         foreach (var i; i > 5; i++;) {
+                                                    
+                                        //         }
+                                        //         var product = Model.Products.FirstOrDefault(x => x.ProductId == recordId[record][1]);
+                                        //         if (product != null)
+                                        //         {
+                                        //             <div class="card" data-product-id="@recordId">
+                                        //                 <div class="items">
+                                        //                     <img src="@product.ImgLink" style="height:150px" />
+                                        //                     <h2>@product.Name</h2>
+                                        //                     <h3>Price: $@product.Price</h3>
+                                        //                     <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                        //                 </div>
+                                        //                 <button class="prevButton">←</button>
+                                        //                 <button class="nextButton">→</button>
+                                        //             </div>
+                                        //         }
+                                        //     }
+                                        // }
+
+                                        foreach (var id in preload)
                                         {
                                             var product = Model.Products.FirstOrDefault(x => x.ProductId == id);
                                             if (product != null)
                                             {
                                                 <div class="card" data-product-id="@id">
                                                     <div class="items">
+                                                        <br />
                                                         <img class="card-img" src="@product.ImgLink" />
-                                                        <h2>@product.Name</h2>
+                                                        <br /><br />
+                                                        <h4>@product.Name</h4>
                                                         <h3>Price: $@product.Price</h3>
-                                                        <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                                        <br />
+                                                        <a href="#" class="add-to-cart-btn button button-project">Add to Cart</a>
+                                                        <br />
                                                     </div>
-                                                    <button class="prevButton">←</button>
-                                                    <button class="nextButton">→</button>
+                                                    <button class="prevButton button button-project button-small">←</button>
+                                                    <button class="nextButton button button-project button-small">→</button>
                                                 </div>
-
                                             }
                                         }
                                     }
@@ -57,7 +90,7 @@
         </div>
     </div>
 </section>
-<section class="page-section cta">
+<section class="page-section cta rounded">
     <div class="container">
         <div class="row">
             <div class="col-xl-9 mx-auto">

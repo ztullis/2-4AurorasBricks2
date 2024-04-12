@@ -39,19 +39,79 @@ namespace _2_4AurorasBricks2.Controllers
 
         public IActionResult Index()
         {
-            var viewModel = new ProjectsListViewModel
+            var Model = new IndexHybridViewModel
             {
-                Products = _repo.Products
-                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                Products = _repo.Products.OrderBy(p => p.ProductId),
+                // BASED ON THE USER RATINGS AND FOR THOSE WHO AREN"T LOGGED IN
+                PreLoadedRecommendations = new List<int> { 13, 21, 20, 12, 23 }
             };
+            // if (User.IsInRole("Customer")
+            if (User.Identity.IsAuthenticated)
+            {
+                // CODE THAT IS MEANT TO TAKE THE USER ID, FIND THE CORRESPONDING CUSTOMER ID, AND FETCH THEIR MOST PREVIOUS TRANSACTION
+                //Random random = new Random();
+                //int randomNumber = random.Next(0, 29135);
 
-            return View(viewModel);
+                ////(int)userID
+
+                //// CUSTOMER IS ASSIGNED TO RANDOM NUMBER
+                //var customer = _repo.Orders.FirstOrDefault(x => x.CustomerId == randomNumber);
+
+                //// MOST RECENT TRANSACTION IS TAKEN FROM RANDOM CUSTOMER
+                //var transaction = _repo.LineItems.FirstOrDefault(x => x.TransactionId == customer.TransactionId);
+
+                //// TOP PRODUCT FROM TRANSACTION IS TAKEN FROM THE TRANSACTION
+                //var product = _repo.Products.FirstOrDefault(x => x.ProductId == transaction.ProductId);
+
+                //// ASSIGNING THE PRODUCT VARIABLE TO SOMETHING IDK WHAT"S GOING ON HERE 
+                //var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == randomNumber);
+
+                //// BLANK LIST
+                //var allProducts = new List<Product>();
+
+                //// FOR LOOP GOING THROUGH THE LIST
+                //for (int i = 1; i <= 5; i++)
+                //{
+                //    // Extract the value of the current rec_X column from the chosen product
+                //    var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
+
+                //    // If the value is not null or empty, find products with the same name
+                //    if (!string.IsNullOrEmpty(recValue))
+                //    {
+                //        var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
+
+                //        // Add the found products to the list of all products
+                //        allProducts.AddRange(recProducts);
+                //    }
+                //}
+
+                // RENAMING THE MODEL IF THE USER IS AUTHENTICATED
+                Model = new IndexHybridViewModel
+                {
+                    Products = _repo.Products.OrderBy(p => p.ProductId),
+                    // CODE THAT IS MEANT TO RETURN A DICTIONARY OF PRODUCT NAMES THAT SOMEHOW CONVERTS TO A NUMBER
+
+                    //RecommendedProducts = new List<Product>
+                    //{
+                    //    { allProducts.Where(p => p.Pop_rec_1 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_2 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_3 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_4 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_5 == product.Name).ToList() }
+                    //},
+
+                    // TAKING THE L AND JUST ASSIGNING IT A PRELOADED DATASET THAT DIFFERS FROM A PERSON LOGGED IN.
+                    PreLoadedRecommendations = new List<int> { 23, 19, 21, 22, 12 }
+                };
+            } 
+            return View(Model);
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
+
         public IActionResult AboutUs()
         {
             return View();
@@ -184,7 +244,7 @@ namespace _2_4AurorasBricks2.Controllers
             var productViewModel = new SingleProductViewModel
             {
                 Products = _repo.Products.Where(x => x.ProductId == id),
-/*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
+                /*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
                 RecommendedProducts = new Dictionary<string, List<Product>>
                 {
                     { "Rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },
