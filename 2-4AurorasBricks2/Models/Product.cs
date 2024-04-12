@@ -32,4 +32,9 @@ public partial class Product
     public string? Rec_3 { get; set; }
     public string? Rec_4 { get; set; }
     public string? Rec_5 { get; set; }
+    public string? Pop_rec_1 { get; set; }
+    public string? Pop_rec_2 { get; set; }
+    public string? Pop_rec_3 { get; set; }
+    public string? Pop_rec_4 { get; set; }
+    public string? Pop_rec_5 { get; set; }
 }

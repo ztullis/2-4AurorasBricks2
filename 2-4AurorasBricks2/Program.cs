@@ -8,9 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Hosting;
 
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -90,6 +87,11 @@ builder.Services.AddHsts(options =>
     options.Preload = true;
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -103,6 +105,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
+
+app.UseSession();
 
 app.UseRouting();
 

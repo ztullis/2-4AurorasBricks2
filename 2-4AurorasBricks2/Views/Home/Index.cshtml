@@ -4,66 +4,78 @@
 
 @model SingleProductViewModel
 
-<section class="page-section clearfix">
+<br /><br />
+<section class="page-section about-heading">
     <div class="container">
-        <div class="intro">
-            <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-                <h2 class="section-heading mb-4">
-                    <span class="section-heading-upper">Explore</span>
-                    <span class="section-heading-lower">Our Sets!</span>
-                </h2>
-                <p class="mb-3">Here are some of our most recommended sets to consider building as you explore!</p>
-                <div class="intro-button mx-auto">
-                    <a class="btn btn-primary btn-xl" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
-                </div>
-
-
-                @{
-                    // This is an if loop that will determine whether or not to show the most popular products or one of the previously purchased products (depending if they are logged in)
-                    // var auth = 1;
-                    // if (auth != 1)
-                    // {
-                        var orderedProductIds = new List<int> { 13, 21, 20, 12, 23 };
-                        foreach (var id in orderedProductIds)
-                        {
-                            var product = Model.Products.FirstOrDefault(x => x.ProductId == id);
-                            if (product != null)
-                            {
-                                <div class="card" data-product-id="@id">
-                                    <div class="items">
-                                        <img src="@product.ImgLink" style="height:150px"/>
-                                        <h2>@product.Name</h2>
-                                        <h3>Price: $@product.Price</h3>
-                                        <a href="#" class="add-to-cart-btn">Add to Cart</a>
+        <div class="about-heading-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-text text-center bg-faded p-5 rounded">
+                        <div style="background-color:rgba(245, 245, 245, 1); padding: 20px;">
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h2 class="section-heading mb-4">
+                                        <span class="section-heading-upper">Explore</span>
+                                        <span class="section-heading-lower">Our Sets!</span>
+                                    </h2>
+                                    <p class="mb-3">Here are some of our most recommended sets to consider building as you explore!</p>
+                                    <br /><br />
+                                    <div class="intro-button mx-auto">
+                                        <a class="btn btn-primary btn-xl" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
                                     </div>
-                                    <button class="prevButton">←</button>
-                                    <button class="nextButton">→</button>
                                 </div>
-                            }
-                        }
-                    // }
-                    // else
-                    // {
-                    //     @foreach (var category in Model.RecommendedProducts)
-                    //     {
-                    //         <h4>@category.Key</h4>
-                    //         @foreach (var recommendedProduct in category.Value)
-                    //         {
-                    //             <div class="card" data-product-id="@recommendedProduct.ProductId">
-                    //                 <div class="items">
-                    //                     <p>@recommendedProduct.Name</p>
-                    //                     <img src="@recommendedProduct.ImgLink" alt="Recommended Product Image" style="width:100%" />
-                    //                     <a href="#" class="add-to-cart-btn">Add to Cart</a>
-                    //                 </div>
-                    //                 <button class="prevButton">←</button>
-                    //                 <button class="nextButton">→</button>
-                    //             </div>
-                    //         }
-                    //     }
-                    // }
-                }
-
-
+                                <div class="col-md-6">
+                                    @{
+                                        // This is an if loop that will determine whether or not to show the most popular products or one of the previously purchased products (depending if they are logged in)
+                                        // var auth = 1;
+                                        // if (auth != 1)
+                                        // {
+                                            var orderedProductIds = new List<int> { 13, 21, 20, 12, 23 };
+                                            foreach (var id in orderedProductIds)
+                                            {
+                                                var product = Model.Products.FirstOrDefault(x => x.ProductId == id);
+                                                if (product != null)
+                                                {
+                                                    <div class="card" data-product-id="@id">
+                                                        <div class="items">
+                                                            <img src="@product.ImgLink" style="height:150px"/>
+                                                            <h2>@product.Name</h2>
+                                                            <h3>Price: $@product.Price</h3>
+                                                            <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                                        </div>
+                                                        <button class="prevButton">←</button>
+                                                        <button class="nextButton">→</button>
+                                                    </div>
+                                                }
+                                            }
+                                        // }
+                                        // else
+                                        // {
+                                        //     @foreach (var category in Model.RecommendedProducts)
+                                        //     {
+                                        //         <h4>@category.Key</h4>
+                                        //         @foreach (var recommendedProduct in category.Value)
+                                        //         {
+                                        //             <div class="card" data-product-id="@recommendedProduct.ProductId">
+                                        //                 <div class="items">
+                                        //                     <p>@recommendedProduct.Name</p>
+                                        //                     <img src="@recommendedProduct.ImgLink" alt="Recommended Product Image" style="width:100%" />
+                                        //                     <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                        //                 </div>
+                                        //                 <button class="prevButton">←</button>
+                                        //                 <button class="nextButton">→</button>
+                                        //             </div>
+                                        //         }
+                                        //     }
+                                        // }
+                                    }
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
