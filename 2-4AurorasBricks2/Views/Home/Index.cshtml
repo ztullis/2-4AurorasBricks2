@@ -19,10 +19,10 @@
                                         <span class="section-heading-upper">Explore</span>
                                         <span class="section-heading-lower">Our Sets!</span>
                                     </h2>
-                                    <p class="mb-3">Here are some of our most recommended sets to consider building as you explore!</p>
+                                    <p class="mb-3 font: 25px;">Here are some of our most recommended sets to consider building as you explore!</p>
                                     <br /><br />
-                                    <div class="intro-button mx-auto">
-                                        <a class="btn btn-primary btn-xl" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
+                                    <div>
+                                        <a class="button button-project" asp-area="" asp-controller="Home" asp-action="Products">View All Products</a>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -35,13 +35,17 @@
                                             {
                                                 <div class="card" data-product-id="@id">
                                                     <div class="items">
+                                                        <br />
                                                         <img class="card-img" src="@product.ImgLink" />
-                                                        <h2>@product.Name</h2>
+                                                        <br /><br />
+                                                        <h4>@product.Name</h4>
                                                         <h3>Price: $@product.Price</h3>
-                                                        <a href="#" class="add-to-cart-btn">Add to Cart</a>
+                                                        <br />
+                                                        <a href="#" class="add-to-cart-btn button button-project">Add to Cart</a>
+                                                        <br />
                                                     </div>
-                                                    <button class="prevButton">←</button>
-                                                    <button class="nextButton">→</button>
+                                                    <button class="prevButton button button-project button-small">←</button>
+                                                    <button class="nextButton button button-project button-small">→</button>
                                                 </div>
 
                                             }
@@ -57,7 +61,7 @@
         </div>
     </div>
 </section>
-<section class="page-section cta">
+<section class="page-section cta rounded">
     <div class="container">
         <div class="row">
             <div class="col-xl-9 mx-auto">
