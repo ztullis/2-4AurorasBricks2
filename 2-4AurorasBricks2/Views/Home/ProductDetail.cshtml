@@ -19,25 +19,15 @@
                             @foreach (Product p in Model.Products)
                             {
                                 <h1>Product ID: @p.Name</h1>
-                                <h3>Price: $@p.Price</h3>
+                                
                                 <div class="row">
                                     <div class="col-md-6">
                                         <img class="card-img-product" src="@p.ImgLink"/>
                                     </div>
                                     <div class="col-md-6">
-                                        <p><strong>Description:</strong></p><br />
-                                        <div class="description">
-                                            @if (p.Description.Length > 150)
-                                            {
-                                                <span class="short-description">@Html.Raw(p.Description.Substring(0, 150))</span>
-                                                <span class="full" style="display:none;">@Html.Raw(p.Description)</span>
-                                                <button class="more-button" onclick="toggleDescription(this)">More...</button>
-                                            }
-                                            else
-                                            {
-                                                @Html.Raw(p.Description)
-                                            }
-                                        </div>
+                                        <p><strong>Description:</strong></p>
+                                        <p>@p.Description</p><br />
+                                        <h3>Price: $@p.Price</h3>
                                         <a href="#" class="add-to-cart-btn">Add to Cart</a>
                                     </div>
                                 </div>
@@ -49,7 +39,6 @@
                                 @foreach (var category in Model.RecommendedProducts)
                                 {
                                  
-                                    <h4>@category.Key</h4>
                                     foreach (var recommendedProduct in category.Value)
                                     {
                                         <div class="card" data-product-id="@recommendedProduct.ProductId">
@@ -59,7 +48,8 @@
                                                 <img class="card-img" src="@recommendedProduct.ImgLink" alt="Recommended Product Image"/>
                                                 
                                                 
-                                                <h3>@recommendedProduct.Name</h3>
+                                                <h2>@recommendedProduct.Name</h2>
+                                                <h3><strong>Price:</strong> $@recommendedProduct.Price</h3>
                                                     
                                                 
                                                 <br /><a href="#" class="add-to-cart-btn">Add to Cart</a>

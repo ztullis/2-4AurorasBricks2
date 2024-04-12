@@ -32,13 +32,13 @@
 @model Product
 
 <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
-    <div class="card h-100 d-block">
+    <div class="card h-100 d-block rounded">
         <div class="card-body d-flex flex-column justify-content-between align-items-center">
-            <img class="card-img-top" src="@Model.ImgLink" style="height: 200px" />
+            <img class="card-img-product" src="@Model.ImgLink" style="height: 200px" />
             <div class="text-center">
-                <h3 class="card-title">@(Model.Name.Length > 25 ? Model.Name.Substring(0, 25) + "..." : Model.Name)</h3>
-                <p class="card-text">@(Model.Description.Length > 50 ? Model.Description.Substring(0, 50) + "..." : Model.Description)</p>
-                <p class="card-text"><strong>Price:</strong> <em>$@Model.Price</em></p>
+                <p class="card-title">@(Model.Name.Length > 25 ? Model.Name.Substring(0, 25) + "..." : Model.Name)</p>
+                @* <p class="card-text">@(Model.Description.Length > 50 ? Model.Description.Substring(0, 50) + "..." : Model.Description)</p> *@
+                <h3 class="card-text"><strong>Price:</strong> <em>$@Model.Price</em></h3>
                 <!-- Add more product information as needed -->
 @*                 <form asp-controller="Cart" asp-action="AddToCart" method="post">
                     <input type="hidden" name="productId" value="@Model.ProductId" />
