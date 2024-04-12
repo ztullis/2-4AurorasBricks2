@@ -175,7 +175,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute("pagenumandtype", "{legoType}/{pageNum}", new { Controller = "Home", action = "Products"});
+
 app.MapControllerRoute("pagination", "{pageNum}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+app.MapControllerRoute("legoType", "{legoType}", new { Controller = "Home", action = "EditProducts", pageNum = 1 });
+
 
 //app.MapControllerRoute(
 //    name: "pagination",
