@@ -6,6 +6,12 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Encodings.Web;
 using _2_4AurorasBricks2.Models.ViewModels;
+using Google.Cloud.RecaptchaEnterprise.V1;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using static _2_4AurorasBricks2.Models.CreateAssessmentSample;
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -688,7 +694,7 @@ namespace _2_4AurorasBricks2.Controllers
             }
 
         }
-        
+
         public IActionResult ExternalLogin(string provider, string returnUrl)
         {
             // Request a redirect to the external login provider
@@ -758,7 +764,47 @@ namespace _2_4AurorasBricks2.Controllers
                 return View("Error");
             }
         }
+        //public class FormController : Controller
+        //{
+        //    [HttpPost]
+        //    public async Task<IActionResult> SubmitForm(FormModel model, string captchaResponse)
+        //    {
+        //        if (await VerifyCaptcha(captchaResponse))
+        //        {
+        //            // CAPTCHA verification successful
+        //            // Process form submission
+        //            return RedirectToAction("Success");
+        //        }
+        //        else
+        //        {
+        //            // CAPTCHA verification failed
+        //            ModelState.AddModelError("", "CAPTCHA verification failed. Please try again.");
+        //            return View(model);
+        //        }
+        //    }
+
+        //    private async Task<bool> VerifyCaptcha(string captchaResponse)
+        //    {
+        //        var secretKey = "YOUR_SECRET_KEY";
+        //        var httpClient = new HttpClient();
+        //        var response = await httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secretKey}&response={captchaResponse}");
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            var jsonResponse = await response.Content.ReadAsStringAsync();
+        //            var captchaResult = JsonConvert.DeserializeObject<CaptchaResponse>(jsonResponse);
+        //            return captchaResult.Success;
+        //        }
+        //        return false;
+        //    }
+
+        //    public class CaptchaResponse
+        //    {
+        //        [JsonProperty("success")]
+        //        public bool Success { get; set; }
+        //    }
+    //}
 
 
     }
+
 }
