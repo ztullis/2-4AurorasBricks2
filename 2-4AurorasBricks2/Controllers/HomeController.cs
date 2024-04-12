@@ -8,6 +8,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
 using NuGet.ProjectModel;
+using System.Security.Cryptography;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -36,117 +37,74 @@ namespace _2_4AurorasBricks2.Controllers
             }
         }
 
-        public IActionResult Index(int userID)
+        public IActionResult Index()
         {
-
-
-            //if (User.Identity.IsAuthenticated)
-            //{
-
-            //    var customerID = User.Identity.Name;
-            //    if (int.TryParse(customerID, out int customerId))
-            //    {
-            //        // Fetch the last purchase or any specific order
-            //        var lastOrder = _repo.Orders.Where(o => o.CustomerId == customerId).OrderByDescending(o => o.Date).FirstOrDefault();
-
-            //        if (lastOrder != null)
-            //        {
-            //            var orderedProductIds = lastOrder.OrderDetails.Select(od => od.ProductId).Distinct().ToList();
-
-            //            // Now use these IDs to find recommendations
-            //            var allProducts = new List<Product>();
-            //            foreach (var id in orderedProductIds)
-            //            {
-            //                var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == id);
-            //                if (originalProduct != null)
-            //                {
-            //                    for (int i = 1; i <= 5; i++)
-            //                    {
-            //                        var recValue = (string)originalProduct.GetType().GetProperty($"Rec_{i}")?.GetValue(originalProduct);
-            //                        if (!string.IsNullOrEmpty(recValue))
-            //                        {
-            //                            var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
-            //                            allProducts.AddRange(recProducts);
-            //                        }
-            //                    }
-            //                }
-            //            }
-
-            //            recommendedIDs = allProducts.Select(p => p.ProductId).Distinct().ToList();
-            //        }
-            //    }
-            //}
-
-            //return View(recommendedIDs); // Pass the recommended IDs to the view
-
-            //if (customerID == null || customerID < 0 )
-            //    {
-            //        // Code to rewrite the recommendedIDs  and reassign them to be the new recommendations.
-            //        // Products = _repo.Products.Where(x => x.ProductId == userID),
-            //    /*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
-            //        // RecommendedProducts = new Dictionary<string, List<Product>>
-            //        // {
-            //            // { "Rec_1", allProducts.Where(p => p.Pop_rec_1 == originalProduct.Name).ToList() },
-            //            // { "Rec_2", allProducts.Where(p => p.Pop_rec_2 == originalProduct.Name).ToList() },
-            //            // { "Rec_3", allProducts.Where(p => p.Pop_rec_3 == originalProduct.Name).ToList() },
-            //            // { "Rec_4", allProducts.Where(p => p.Pop_rec_4 == originalProduct.Name).ToList() },
-            //            // { "Rec_5", allProducts.Where(p => p.Pop_rec_5 == originalProduct.Name).ToList() }
-            //            // UpdatedIDs
-            //        // recommendedIDs = 
-            //        // }
-            //    }
-            //}
-
-            //return View(recommendedIDs);
-
-            var viewModel = new SingleProductViewModel
+            var Model = new IndexHybridViewModel
             {
-                Products = _repo.Products
-                    .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
+                Products = _repo.Products.OrderBy(p => p.ProductId),
+                // BASED ON THE USER RATINGS AND FOR THOSE WHO AREN"T LOGGED IN
+                PreLoadedRecommendations = new List<int> { 13, 21, 20, 12, 23 }
             };
-
-            var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == userID);
-
-            var allProducts = new List<Product>();
-
-            for (int i = 1; i <= 5; i++)
+            // if (User.IsInRole("Customer")
+            if (User.Identity.IsAuthenticated)
             {
-                // Extract the value of the current rec_X column from the chosen product
-                var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
+                // CODE THAT IS MEANT TO TAKE THE USER ID, FIND THE CORRESPONDING CUSTOMER ID, AND FETCH THEIR MOST PREVIOUS TRANSACTION
+                //Random random = new Random();
+                //int randomNumber = random.Next(0, 29135);
 
-                // If the value is not null or empty, find products with the same name
-                if (!string.IsNullOrEmpty(recValue))
+                ////(int)userID
+
+                //// CUSTOMER IS ASSIGNED TO RANDOM NUMBER
+                //var customer = _repo.Orders.FirstOrDefault(x => x.CustomerId == randomNumber);
+
+                //// MOST RECENT TRANSACTION IS TAKEN FROM RANDOM CUSTOMER
+                //var transaction = _repo.LineItems.FirstOrDefault(x => x.TransactionId == customer.TransactionId);
+
+                //// TOP PRODUCT FROM TRANSACTION IS TAKEN FROM THE TRANSACTION
+                //var product = _repo.Products.FirstOrDefault(x => x.ProductId == transaction.ProductId);
+
+                //// ASSIGNING THE PRODUCT VARIABLE TO SOMETHING IDK WHAT"S GOING ON HERE 
+                //var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == randomNumber);
+
+                //// BLANK LIST
+                //var allProducts = new List<Product>();
+
+                //// FOR LOOP GOING THROUGH THE LIST
+                //for (int i = 1; i <= 5; i++)
+                //{
+                //    // Extract the value of the current rec_X column from the chosen product
+                //    var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
+
+                //    // If the value is not null or empty, find products with the same name
+                //    if (!string.IsNullOrEmpty(recValue))
+                //    {
+                //        var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
+
+                //        // Add the found products to the list of all products
+                //        allProducts.AddRange(recProducts);
+                //    }
+                //}
+
+                // RENAMING THE MODEL IF THE USER IS AUTHENTICATED
+                Model = new IndexHybridViewModel
                 {
-                    var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
+                    Products = _repo.Products.OrderBy(p => p.ProductId),
+                    // CODE THAT IS MEANT TO RETURN A DICTIONARY OF PRODUCT NAMES THAT SOMEHOW CONVERTS TO A NUMBER
 
-                    // Add the found products to the list of all products
-                    allProducts.AddRange(recProducts);
-                }
-            }
+                    //RecommendedProducts = new List<Product>
+                    //{
+                    //    { allProducts.Where(p => p.Pop_rec_1 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_2 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_3 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_4 == product.Name).ToList() },
+                    //    { allProducts.Where(p => p.Pop_rec_5 == product.Name).ToList() }
+                    //},
 
-            var customer = _repo.Orders.FirstOrDefault(x => x.CustomerId == userID);
-
-            var transaction = _repo.LineItems.LastOrDefault(x => x.TransactionId == customer.TransactionId);
-
-            var prod = _repo.Products.Where(x => x.ProductId == transaction.ProductId);
-
-            var product = _repo.Products.FirstOrDefault(x => x.ProductId == transaction.ProductId);
-
-            var productViewModel = new SingleProductViewModel
-            {
-                Products = prod,
-                /*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
-                RecommendedProducts = new Dictionary<string, List<Product>>
-                {
-                    { "Rec_1", allProducts.Where(p => p.Pop_rec_1 == product.Name).ToList() },
-                    { "Rec_2", allProducts.Where(p => p.Pop_rec_2 == product.Name).ToList() },
-                    { "Rec_3", allProducts.Where(p => p.Pop_rec_3 == product.Name).ToList() },
-                    { "Rec_4", allProducts.Where(p => p.Pop_rec_4 == product.Name).ToList() },
-                    { "Rec_5", allProducts.Where(p => p.Pop_rec_5 == product.Name).ToList() }
-                }
-            };
-
-            return View(productViewModel);
+                    // TAKING THE L AND JUST ASSIGNING IT A PRELOADED DATASET THAT DIFFERS FROM A PERSON LOGGED IN.
+                    PreLoadedRecommendations = new List<int> { 23, 19, 21, 22, 12 }
+                };
+            } 
+            return View(Model);
         }
 
         public IActionResult Privacy()
