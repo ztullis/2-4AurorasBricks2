@@ -1,4 +1,12 @@
 ﻿@page
+
+@using _2_4AurorasBricks2
+@using _2_4AurorasBricks2.Models
+@using _2_4AurorasBricks2.Models.ViewModels
+@using _2_4AurorasBricks2.Infrastructure
+@addTagHelper *, 2-4AurorasBricks2
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @model _2_4AurorasBricks2.Pages.CartModel
 @{
     Layout = "/Views/Shared/_Layout.cshtml";
@@ -32,8 +40,8 @@
                                         <tr>
                                             <td class="text-left">@l.Product.Name</td>
                                             <td class="text-center">@l.Product.Name</td>
-                                            <td class="text-right">$25</td>
-                                            <td class="text-right">@((l.Quantity * 25).ToString("c"))</td>
+                                            <td class="text-right">$ @l.Product.Price</td>
+                                            <td class="text-right">@((l.Quantity * l.Product.Price).ToString("c"))</td>
                                             <td class="text-center">
                                                 <form asp-page-handler="Remove" method="post" value="@l.Product.ProductId">
                                                     <input type="hidden" name="ProductId" value="@l.Product.ProductId" />
