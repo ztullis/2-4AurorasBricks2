@@ -36,13 +36,49 @@ namespace _2_4AurorasBricks2.Controllers
             }
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int userID)
         {
-            var viewModel = new ProjectsListViewModel
+            var viewModel = new SingleProductViewModel
             {
                 Products = _repo.Products
                     .OrderBy(p => p.ProductId) // Ensure there's some ordering, if not already
             };
+
+            //var originalProduct = _repo.Products.FirstOrDefault(p => p.ProductId == userID);
+
+            //var allProducts = new List<Product>();
+
+            //for (int i = 1; i <= 5; i++)
+            //{
+            //    // Extract the value of the current rec_X column from the chosen product
+            //    var recValue = (string)originalProduct.GetType().GetProperty("Rec_" + i).GetValue(originalProduct);
+
+            //    // If the value is not null or empty, find products with the same name
+            //    if (!string.IsNullOrEmpty(recValue))
+            //    {
+            //        var recProducts = _repo.Products.Where(x => x.Name == recValue).ToList();
+
+            //        // Add the found products to the list of all products
+            //        allProducts.AddRange(recProducts);
+            //    }
+            //}
+
+            //var productViewModel = new SingleProductViewModel
+            //{
+            //    Products = _repo.Products.Where(x => x.ProductId == userID),
+            //    /*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
+            //    RecommendedProducts = new Dictionary<string, List<Product>>
+            //    {
+            //        { "Rec_1", allProducts.Where(p => p.Pop_rec_1 == originalProduct.Name).ToList() },
+            //        { "Rec_2", allProducts.Where(p => p.Pop_rec_2 == originalProduct.Name).ToList() },
+            //        { "Rec_3", allProducts.Where(p => p.Pop_rec_3 == originalProduct.Name).ToList() },
+            //        { "Rec_4", allProducts.Where(p => p.Pop_rec_4 == originalProduct.Name).ToList() },
+            //        { "Rec_5", allProducts.Where(p => p.Pop_rec_5 == originalProduct.Name).ToList() }
+            //    }
+            //};
+
+            //return View(productViewModel);
+
 
             return View(viewModel);
         }
@@ -183,7 +219,7 @@ namespace _2_4AurorasBricks2.Controllers
             var productViewModel = new SingleProductViewModel
             {
                 Products = _repo.Products.Where(x => x.ProductId == id),
-/*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
+                /*                Products = _repo.Products.FirstOrDefault(p => p.ProductId == id),*/ // Include the original product in the view model
                 RecommendedProducts = new Dictionary<string, List<Product>>
                 {
                     { "Rec_1", allProducts.Where(p => p.Rec_1 == originalProduct.Name).ToList() },

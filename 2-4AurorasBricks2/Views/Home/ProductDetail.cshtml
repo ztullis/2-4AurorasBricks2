@@ -15,7 +15,7 @@
                 {
                     <h1>Product ID: @p.Name</h1>
                     <h3>Price: $@p.Price</h3>
-                    <img src="@p.ImgLink" style="width:100"/>
+                    <img src="@p.ImgLink" style="width:100%"/>
                 }
 
                 @if (Model.RecommendedProducts != null && Model.RecommendedProducts.Any())
@@ -24,7 +24,7 @@
                     @foreach (var category in Model.RecommendedProducts)
                     {
                         <h4>@category.Key</h4>
-                        foreach (var recommendedProduct in category.Value)
+                        @foreach (var recommendedProduct in category.Value)
                         {
                             <div class="card" data-product-id="@recommendedProduct.ProductId">
                                 <div class="items">
