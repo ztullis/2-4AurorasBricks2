@@ -3,6 +3,10 @@
 @{
     ViewBag.Title = "User Login";
 }
+@* <head>
+  <script src="https://www.google.com/recaptcha/enterprise.js?render=6Le-f7gpAAAAADperViW_ChjZkIsWI-qWf8sqsOO"></script>
+  <!-- Your code -->
+</head> *@
 <br />
 <div class="container container-form">
     <div class="row justify-content-center">
@@ -14,7 +18,7 @@
                 <div class="text-center">
                     <h1>Local Account Login</h1>
                     <hr />
-                    <form class="form-outline" method="post" asp-action="Login" asp-controller="Account">
+                    <form id= "recaptchaForm"class="form-outline" method="post" asp-action="Login" asp-controller="Account">
                         <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="form-group">
@@ -37,6 +41,12 @@
                         </div>
                         <br />
                         <div class="form-group">
+@*                             <button class="g-recaptcha"
+                                    data-sitekey="6Le-f7gpAAAAADperViW_ChjZkIsWI-qWf8sqsOO"
+                                    data-callback='onSubmit'
+                                    data-action='submit'>
+                                Submit
+                            </button> *@
                             <button type="submit" class="button button-project">Login</button>
                         </div>
                         <br />
@@ -77,3 +87,12 @@
         </div>
     </div>
 </div>
+
+                                                    <!-- Replace the variables below. -->
+<!-- Replace the variables below. -->
+@* <script>
+    function onSubmit(token) {
+        document.getElementById("").submit();
+    }
+</script>
+ *@
