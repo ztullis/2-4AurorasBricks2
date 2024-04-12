@@ -476,5 +476,10 @@ namespace _2_4AurorasBricks2.Controllers
 
             return View(predictions);
         }
+        public IActionResult ConfirmPage(int fraud = 0)
+        {
+
+            return View("CartConfirmation", fraud);
+        }
     }
 }
