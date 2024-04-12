@@ -8,6 +8,7 @@ using Microsoft.ML.OnnxRuntime.Tensors;
 using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
 using NuGet.ProjectModel;
+using System.Security.Cryptography.Xml;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -197,16 +198,17 @@ namespace _2_4AurorasBricks2.Controllers
             return View(productViewModel);
         }
 
-        public IActionResult Products(int pageNum)
+        public IActionResult Products(int pageNum, string? legoType, string? legoColor, int pageSize = 5 )
         {
-            int pageSize = 10;
 
+            //pageNum = pageNum <= 0 ? 1 : pagenum;
             //Ensure the page number is at least 1
             pageNum = Math.Max(1, pageNum);
 
-            var viewModel = new ProjectsListViewModel
+            var viewModel = new ProjectsViewModel
             {
                 Products = _repo.Products
+                    .Where(x => (x.Category == legoType || legoType == null) && (x.PrimaryColor == legoColor || legoColor == null))
                     .OrderBy(p => p.ProductId)
                     .Skip((pageNum - 1) * pageSize)
                     .Take(pageSize),
@@ -215,8 +217,12 @@ namespace _2_4AurorasBricks2.Controllers
                 {
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
-                    TotalItems = _repo.Products.Count()
+                    TotalItems = legoType == null ? _repo.Products.Count() : _repo.Products.Where(x => x.Category == legoType).Count()
                 },
+
+                CurrentLegoCategory = legoType,
+                CurrentLegoColor = legoColor,
+                CurrentPageSize = pageSize
 
             };
             return View(viewModel);
