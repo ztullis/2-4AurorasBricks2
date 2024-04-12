@@ -53,6 +53,8 @@ services.AddAuthentication().AddGoogle(googleOptions =>
 });
 
 
+
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
     options =>
     {

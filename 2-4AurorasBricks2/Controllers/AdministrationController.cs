@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace _2_4AurorasBricks2.Controllers
 {
     [Authorize(Roles = "Admin")] // Adding another role to this is an OR; place another authorize underneath to be AND
+
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -19,12 +20,14 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult CreateRole()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel roleModel)
         {
             if (ModelState.IsValid)
@@ -63,6 +66,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ListRoles()
         {
             List<IdentityRole> roles = await _roleManager.Roles.ToListAsync();
@@ -71,6 +75,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> EditRole(string roleId)
         {
             //First Get the role information from the database
@@ -109,6 +114,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -144,6 +150,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> EditUsersInRole(string roleId)
         {
             ViewBag.roleId = roleId;
@@ -184,6 +191,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> EditUsersInRole(List<UserRoleViewModel> model, string roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
@@ -231,6 +239,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteRole(string roleId)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
@@ -278,6 +287,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ListUsers()
         {
             var users = _userManager.Users;
@@ -285,6 +295,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> EditUser(string UserId)
         {
             //First Fetch the User Details by UserId
@@ -316,6 +327,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
@@ -355,6 +367,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteUser(string UserId)
         {
             // Fetch the user you want to delete
@@ -389,6 +402,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserRoles(string UserId)
         {
             //First Fetch the User Information from the Identity database by user Id
@@ -436,6 +450,7 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ManageUserRoles(List<UserRolesViewModel> model, string UserId)
         {
             var user = await _userManager.FindByIdAsync(UserId);
@@ -475,5 +490,6 @@ namespace _2_4AurorasBricks2.Controllers
 
             return RedirectToAction("EditUser", new { UserId = UserId });
         }
+
     }
 }
