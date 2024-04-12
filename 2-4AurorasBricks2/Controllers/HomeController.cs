@@ -121,12 +121,11 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
         public IActionResult EditProducts(int pageNum)
         {
             pageNum = Math.Max(1, pageNum);
 
-            var viewModel = new ProjectsViewModel
+            var viewModel = new ProjectsListViewModel
             {
                 Products = _repo.Products
                     .Where(x => (x.Category == legoType || legoType == null) && (x.PrimaryColor == legoColor || legoColor == null))
