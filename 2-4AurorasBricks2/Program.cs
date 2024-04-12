@@ -48,8 +48,8 @@ var configuration = builder.Configuration;
 
 services.AddAuthentication().AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = configuration["GoogleClientId"];
-    googleOptions.ClientSecret = configuration["GoogleClientSecret"];
+    googleOptions.ClientId = builder.Configuration["GoogleClientId"];
+    googleOptions.ClientSecret = builder.Configuration["GoogleClientSecret"];
 });
 
 

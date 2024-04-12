@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace _2_4AurorasBricks2.Controllers
 {
@@ -288,9 +290,9 @@ namespace _2_4AurorasBricks2.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult ListUsers()
+        public async Task<IActionResult> ListUsers()
         {
-            var users = _userManager.Users;
+            var users = await _userManager.Users.ToListAsync();
             return View(users);
         }
 
@@ -366,9 +368,16 @@ namespace _2_4AurorasBricks2.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> DeleteUserConfirm(string UserId)
+        {
+            var user = await _userManager.FindByIdAsync(UserId);
+
+            return View(user);
+        }
+
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> DeleteUser(string UserId)
+        public async Task<IActionResult> DeleteUserConfirmPost(string UserId)
         {
             // Fetch the user you want to delete
             var user = await _userManager.FindByIdAsync(UserId);
@@ -400,6 +409,7 @@ namespace _2_4AurorasBricks2.Controllers
                 return View("ListUsers");
             }
         }
+
 
         [HttpGet]
         [AllowAnonymous]
