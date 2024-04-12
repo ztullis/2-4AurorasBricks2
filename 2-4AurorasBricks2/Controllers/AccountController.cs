@@ -97,6 +97,17 @@ namespace _2_4AurorasBricks2.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            // Clear cart on logout
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //HttpContext.Session.Remove("Cart_" + userId);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl)
         {
