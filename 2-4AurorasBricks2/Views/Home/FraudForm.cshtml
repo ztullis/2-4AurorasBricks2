@@ -1,74 +1,88 @@
 ﻿
-@{
-    ViewData["Title"] = "Create Order";
-}
-@model Order
 
+<h2>@ViewData["Title"]</h2>
 
-<h2>We have been receiving fraudulent orders. To secure your order, please fill out the following information.</h2>
+@model FraudViewModel
 
-<form asp-action="Create" method="post">
+<form asp-action="Predict" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- Assuming your Order model's properties... -->
     <div class="form-group">
-        <input asp-for="CustomerId" class="form-control" type="hidden"/>
+        <label asp-for="Order.Date" class="control-label">Date</label>
+        <input asp-for="Order.Date" class="form-control" type="date" />
     </div>
 
     <div class="form-group">
-        <label asp-for="Date" class="control-label"></label>
-        <input asp-for="Date" class="form-control" type="date" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="DayOfWeek" class="control-label"></label>
-        <input asp-for="DayOfWeek" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Time" class="control-label"></label>
-        <input asp-for="Time" class="form-control" type="time" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="EntryMode" class="control-label"></label>
-        <input asp-for="EntryMode" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Amount" class="control-label"></label>
-        <input asp-for="Amount" class="form-control" type="number" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="TypeOfTransaction" class="control-label"></label>
-        <input asp-for="TypeOfTransaction" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CountryOfTransaction" class="control-label"></label>
-        <input asp-for="CountryOfTransaction" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ShippingAddress" class="control-label"></label>
-        <textarea asp-for="ShippingAddress" class="form-control"></textarea>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Bank" class="control-label"></label>
-        <input asp-for="Bank" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="TypeOfCard" class="control-label"></label>
-        <input asp-for="TypeOfCard" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Fraud" class="control-label"></label>
-        <select asp-for="Fraud" class="form-control">
-            <option value="">Please select</option>
-            <option value="0">No</option>
-            <option value="1">Yes</option>
+        <label asp-for="Order.DayOfWeek" class="control-label">Day of Week</label>
+        <select asp-for="Order.DayOfWeek" class="form-control">
+            <option value="Mon">Monday</option>
+            <option value="Tue">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thu">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+            <option value="Sun">Sunday</option>
         </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.Time" class="control-label">Time</label>
+        <input asp-for="Order.Time" class="form-control" type="time" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.TypeOfTransaction" class="control-label">Type of Transaction</label>
+        <select asp-for="Order.TypeOfTransaction" class="form-control">
+            <option value="Online">Online</option>
+            <option value="POS">Point of Sale (POS)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.Amount" class="control-label">Amount</label>
+        <input asp-for="Order.Amount" class="form-control" type="number" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.TypeOfTransaction" class="control-label">Type of Transaction</label>
+        <input asp-for="Order.TypeOfTransaction" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.CountryOfTransaction" class="control-label">Country of Transaction</label>
+        <input asp-for="Order.CountryOfTransaction" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.ShippingAddress" class="control-label">Shipping Address</label>
+        <input asp-for="Order.ShippingAddress" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.Bank" class="control-label">Bank</label>
+        <input asp-for="Order.Bank" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Order.TypeOfCard" class="control-label">Type of Card</label>
+        <input asp-for="Order.TypeOfCard" class="form-control" />
+    </div>
+
+    <!-- Additional Fields -->
+    <div class="form-group">
+        <label asp-for="Age" class="control-label">Age</label>
+        <input asp-for="Age" class="form-control" type="number" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CountryOfResidence" class="control-label">Country of Residence</label>
+        <input asp-for="CountryOfResidence" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Gender" class="control-label">Gender (M/F)</label>
+        <input asp-for="Gender" class="form-control" maxlength="1" />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
