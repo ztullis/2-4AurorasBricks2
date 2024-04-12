@@ -9,6 +9,7 @@ using _2_4AurorasBricks2.Models.ViewModels;
 using System.Drawing.Printing;
 using NuGet.ProjectModel;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace _2_4AurorasBricks2.Controllers
@@ -36,7 +37,7 @@ namespace _2_4AurorasBricks2.Controllers
                 _logger.LogError($"Error loading the ONNX model: {ex.Message}");
             }
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var Model = new IndexHybridViewModel
@@ -103,7 +104,7 @@ namespace _2_4AurorasBricks2.Controllers
                     // TAKING THE L AND JUST ASSIGNING IT A PRELOADED DATASET THAT DIFFERS FROM A PERSON LOGGED IN.
                     PreLoadedRecommendations = new List<int> { 23, 19, 21, 22, 12 }
                 };
-            } 
+            }
             return View(Model);
         }
 
@@ -120,14 +121,17 @@ namespace _2_4AurorasBricks2.Controllers
         {
             return View();
         }
-        public IActionResult EditProducts(int pageNum, string? legoType, string? legoColor, int pageSize = 5)
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditProducts(int pageNum)
         {
+            int pageSize = 10;
+
+            //Ensure the page number is at least 1
             pageNum = Math.Max(1, pageNum);
 
-            var viewModel = new ProjectsViewModel
+            var viewModel = new ProjectsListViewModel
             {
                 Products = _repo.Products
-                    .Where(x => (x.Category == legoType || legoType == null) && (x.PrimaryColor == legoColor || legoColor == null))
                     .OrderBy(p => p.ProductId)
                     .Skip((pageNum - 1) * pageSize)
                     .Take(pageSize),
@@ -136,25 +140,22 @@ namespace _2_4AurorasBricks2.Controllers
                 {
                     CurrentPage = pageNum,
                     ItemsPerPage = pageSize,
-                    TotalItems = legoType == null ? _repo.Products.Count() : _repo.Products.Where(x => x.Category == legoType).Count()
+                    TotalItems = _repo.Products.Count()
                 },
-
-                CurrentLegoCategory = legoType,
-                CurrentLegoColor = legoColor,
-                CurrentPageSize = pageSize
 
             };
             return View(viewModel);
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddProducts()
         {
             var newProduct = new Product();
             return View(newProduct);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddProducts(Product response)
         {
@@ -173,6 +174,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View(response);
             //}
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult EditProductsSingle(int id)
         {
@@ -181,7 +183,7 @@ namespace _2_4AurorasBricks2.Controllers
 
             return View("AddProducts", productToEdit);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult EditProductsSingle(Product updatedProduct)
         {
@@ -200,7 +202,7 @@ namespace _2_4AurorasBricks2.Controllers
             //    return View("AddProducts", updatedProduct);
             //}
         }
-        
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteProducts(int id)
         {
@@ -209,7 +211,7 @@ namespace _2_4AurorasBricks2.Controllers
 
             return View("DeleteProducts", productToDelete);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult DeleteProducts(Product productToDelete)
         {
@@ -217,10 +219,12 @@ namespace _2_4AurorasBricks2.Controllers
 
             return RedirectToAction("EditProducts");
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult EditUsers()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult ProductDetail(int id)
         {
             // Retrieve the product with the specified ID
@@ -260,7 +264,8 @@ namespace _2_4AurorasBricks2.Controllers
             return View(productViewModel);
         }
 
-        public IActionResult Products(int pageNum, string? legoType, string? legoColor, int pageSize = 5 )
+        [AllowAnonymous]
+        public IActionResult Products(int pageNum, string? legoType, string? legoColor, int pageSize = 5)
         {
 
             //pageNum = pageNum <= 0 ? 1 : pagenum;
@@ -296,17 +301,8 @@ namespace _2_4AurorasBricks2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        [HttpGet]
-        public IActionResult SubmitCart(int amount)
-        {
-            
-
-
-            return View("FraudForm");
-        }
-
         [HttpPost]
-        public IActionResult Predict(int TransactionId = 12345, int CustomerId= 12345, byte Time = 15, short Amount = 30, Decimal Age = 22, string DayOfWeek = "Mon", string EntryMode = "PIN", string TypeOfTransaction = "Online", string CountryOfTransaction = "India", string ShippingAddress = "123 Main St.", string Bank = "RBS", string TypeOfCard = "Visa", string CountryOfResidence = "India", string Gender = "M")
+        public IActionResult Predict(int TransactionId, int CustomerId, byte Time, short Amount, Decimal Age, string DayOfWeek, string EntryMode, string TypeOfTransaction, string CountryOfTransaction, string ShippingAddress, string Bank, string TypeOfCard, string CountryOfResidence, string Gender)
         {
             var class_type_dict = new Dictionary<int, string>
             {
@@ -392,7 +388,7 @@ namespace _2_4AurorasBricks2.Controllers
             }
             return View("Index");
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult ReviewOrders() //Home Controller for Reviewing Orders
         {
             var records = _repo.Orders.Take(20).ToList(); // I need to pass the ORDERS and the CUSTOMERS to accurately use the ONNX file, which expects values from both tables.
@@ -411,7 +407,7 @@ namespace _2_4AurorasBricks2.Controllers
                 var input = new List<float>
                 {
                     // Reassigning anything that isn't float to a float.
-                    (float)record.TransactionId, 
+                    (float)record.TransactionId,
                     (float)record.CustomerId,
                     (float)record.Time,
 
@@ -478,18 +474,7 @@ namespace _2_4AurorasBricks2.Controllers
                 predictions.Add(new FraudPrediction { Order = record, Prediction = PredictionResult });
             }
 
-            
-
-            return View("CartConfirmation", predictions);
-        }
-
-        //This page is a hard coded version of what would happen if the fraud is equal to zero because unfortunately we didn't have time to finish implementing the (very well built) fraud pipeline
-        public IActionResult ConfirmPage(int fraud = 0)
-        {
-
-            return View("CartConfirmation", fraud);
+            return View(predictions);
         }
     }
 }
-
-
