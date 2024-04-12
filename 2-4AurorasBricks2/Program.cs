@@ -94,6 +94,18 @@ builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
 
 var app = builder.Build();
 
+//enable CSP Header
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Content-Security-Policy", "base-uri 'self'; " + "default -src 'self'; " +
+        "img-src 'self' https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com https://www.yourwebsite.com/lib/photos; " +
+        "object-src 'none'; " +
+        "script-src 'self' https://code.jquery.com; " +
+        "style-src 'self' https://fonts.googleapis.com; " +
+        "font-src 'self' https://fonts.gstatic.com; " +
+        "upgrade-insecure-requests;");
+    await next.Invoke();
+});
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
