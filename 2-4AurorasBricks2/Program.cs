@@ -120,7 +120,7 @@ var app = builder.Build();
 app.Use(async (context, next) =>
 {
     context.Response.Headers.Add("Content-Security-Policy", "base-uri 'self'; " + "default -src 'self'; " +
-        "img-src 'self' https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com https://www.yourwebsite.com/lib/photos; " +
+        "img-src 'self' http://www.w3.org https://m.media-amazon.com https://www.lego.com https://images.brickset.com https://www.brickeconomy.com https://www.yourwebsite.com/lib/photos; " +
         "object-src 'none'; " +
         "script-src 'self' https://code.jquery.com; " +
         "style-src 'self' https://fonts.googleapis.com; " +
